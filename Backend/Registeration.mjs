@@ -4,6 +4,7 @@
 //source:https://stackoverflow.com/questions/53636014/check-if-a-dynamodb-table-contains-a-key-and-return-a-boolean
 //source:https://medium.com/@vuongtran/using-node-js-bcrypt-module-to-hash-password-5343a2aa2342
 //source:https://www.freecodecamp.org/news/how-to-hash-passwords-with-bcrypt-in-nodejs/
+//source:https://stackoverflow.com/questions/6953286/how-to-encrypt-data-that-needs-to-be-decrypted-in-node-js
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
   DynamoDBDocumentClient,
@@ -12,7 +13,7 @@ import {
   GetCommand,
   DeleteCommand,
 } from "@aws-sdk/lib-dynamodb";
-//import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 export const handler = async (event) => {
   const client = new DynamoDBClient({});
   const dynamo = DynamoDBDocumentClient.from(client);
@@ -23,20 +24,10 @@ export const handler = async (event) => {
   let responseBody = "";
   let statusCode = 0;
   let tableName="user-dalVacation";
-  /*const saltRounds = 10;
-  bcrypt.genSalt(saltRounds, (err, salt) => {
-  if (err) {
-      // Handle error
-      return;
-  }
-  bcrypt.hash(password, salt, (err, password) => {
-    if (err) {
-        // Handle error
-        return;
-    }
-console.log('Hashed password:', password);
-});
-  });*/
+  var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
+  var key = 'password';
+  var cipher = crypto.createCipher(algorithm, key);  
+  password = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
   const body={
             user_id: user_id,
             email: email,
