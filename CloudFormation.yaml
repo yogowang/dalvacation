@@ -14,16 +14,16 @@ Resources:
       MemorySize: 512
       Code:
          ZipFile: |
-          import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-          import {
-            DynamoDBDocumentClient,
-            ScanCommand,
-            PutCommand,
-            GetCommand,
-            DeleteCommand,
-          } from "@aws-sdk/lib-dynamodb";
-          import crypto from 'crypto';
-          export const handler = async (event) => {
+          const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+          const {
+                      DynamoDBDocumentClient,
+                      ScanCommand,
+                      PutCommand,
+                      GetCommand,
+                      DeleteCommand,
+                    } = require("@aws-sdk/lib-dynamodb");
+          const crypto = require('crypto');
+          exports.handler = async (event) => {
             const client = new DynamoDBClient({});
             const dynamo = DynamoDBDocumentClient.from(client);
             const user_id=JSON.parse(event.body).user_id;
