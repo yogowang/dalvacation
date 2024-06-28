@@ -41,10 +41,10 @@ npm start
 
 ## Folder Structure
 
--src
---assets
---components
---pages
+-src <br>
+--assets <br>
+--components <br>
+--pages <br>
 
 - Assets folder-> Use assets folder for storing and static asset like images.
 - Components folder -> Use components forlder for the code for various components like textbox, textfield, etc.
