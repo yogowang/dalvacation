@@ -1,0 +1,127 @@
+# source:https://www.jennapederson.com/blog/provisioning-an-ec2-instance-with-cloudformation-part-1/
+AWSTemplateFormatVersion: 2010-09-09
+Description: Iac for bookstore
+#Source:https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html
+Resources:
+  LambdaRegister:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: RegisterDalvacation
+      Runtime: nodejs20.x
+      Role: arn:aws:iam::082497693506:role/LabRole
+      Handler: index.handler
+      Timeout: 60
+      MemorySize: 512
+      Code:
+         ZipFile: |
+          import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+          import {
+            DynamoDBDocumentClient,
+            ScanCommand,
+            PutCommand,
+            GetCommand,
+            DeleteCommand,
+          } from "@aws-sdk/lib-dynamodb";
+          import crypto from 'crypto';
+          export const handler = async (event) => {
+            const client = new DynamoDBClient({});
+            const dynamo = DynamoDBDocumentClient.from(client);
+            const user_id=JSON.parse(event.body).user_id;
+            const email=JSON.parse(event.body).email;
+            var password=JSON.parse(event.body).password;
+            const userName=JSON.parse(event.body).userName;
+            let responseBody = "";
+            let statusCode = 0;
+            let tableName="UserDalVacation";
+            var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
+            var key = 'password';
+            var cipher = crypto.createCipher(algorithm, key);  
+            password = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
+            const body={
+                      user_id: user_id,
+                      email: email,
+                      password:password,
+                      userName: userName
+            }
+            try {
+            const user=await dynamo.send(
+                    new GetCommand({
+                      TableName: tableName,
+                      Key: {
+                        user_id: user_id,
+                      },
+                    })
+                  );
+                  if(!user.Item){
+                await dynamo.send(
+                    new PutCommand({
+                      TableName:tableName,
+                      Item:body
+                    })
+                  );
+                responseBody = JSON.stringify(body)
+                statusCode = 200;
+                  }
+                  else{
+                    responseBody="user already exist"
+                    statusCode = 403;
+                  }
+            } catch (err) {
+                responseBody = `Unable to put Product: ${err}`;
+                statusCode = 403;
+            }
+            const response = {
+                    statusCode: statusCode,
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: responseBody
+                };
+            return response;
+          };
+  #source:https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dynamodb-table.html
+  #source:https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-dynamodb.html
+  DalVacation:
+    Type: AWS::DynamoDB::Table
+    Properties:
+     TableName: UserDalVacation
+     AttributeDefinitions:
+        - AttributeName: "user_id"
+          AttributeType: "S"
+     KeySchema:
+        - AttributeName: "user_id"
+          KeyType: "HASH"
+     ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+#source:https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpool.html
+#source:https://mahira-technology.medium.com/aws-cloudformation-template-aws-cognito-user-pool-2356c757ba12
+#source:https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html
+#source:https://youtu.be/zTSGrd3HD0k?si=MDLUsi7F2L3gbyTk
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: MyUserPool
+      UsernameAttributes:
+        - phone_number
+        - email
+      AutoVerifiedAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireNumbers: true
+      MfaConfiguration: "OFF"
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: MyUserPoolClient
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_SRP_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      SupportedIdentityProviders:
+        - COGNITO
