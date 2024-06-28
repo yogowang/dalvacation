@@ -5,16 +5,17 @@
 //source:https://medium.com/@vuongtran/using-node-js-bcrypt-module-to-hash-password-5343a2aa2342
 //source:https://www.freecodecamp.org/news/how-to-hash-passwords-with-bcrypt-in-nodejs/
 //source:https://stackoverflow.com/questions/6953286/how-to-encrypt-data-that-needs-to-be-decrypted-in-node-js
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import {
-  DynamoDBDocumentClient,
-  ScanCommand,
-  PutCommand,
-  GetCommand,
-  DeleteCommand,
-} from "@aws-sdk/lib-dynamodb";
-import crypto from 'crypto';
-export const handler = async (event) => {
+//source:https://stackoverflow.com/questions/76065961/syntaxerror-unexpected-token-export-in-aws-lambda-node-14-x
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+const {
+            DynamoDBDocumentClient,
+            ScanCommand,
+            PutCommand,
+            GetCommand,
+            DeleteCommand,
+          } = require("@aws-sdk/lib-dynamodb");
+const crypto = require('crypto');
+exports.handler = async (event) => {
   const client = new DynamoDBClient({});
   const dynamo = DynamoDBDocumentClient.from(client);
   const user_id=JSON.parse(event.body).user_id;
@@ -23,7 +24,7 @@ export const handler = async (event) => {
   const userName=JSON.parse(event.body).userName;
   let responseBody = "";
   let statusCode = 0;
-  let tableName="user-dalVacation";
+  let tableName="UserDalVacation";
   var algorithm = 'aes256'; // or any other algorithm supported by OpenSSL
   var key = 'password';
   var cipher = crypto.createCipher(algorithm, key);  
@@ -35,7 +36,7 @@ export const handler = async (event) => {
             userName: userName
   }
   try {
-   const user=await dynamo.send(
+  const user=await dynamo.send(
           new GetCommand({
             TableName: tableName,
             Key: {
