@@ -1,24 +1,41 @@
-import logo from './logo.svg';
 import './App.css';
+import Login from './pages/authentication/login/Login';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import Signup from './pages/authentication/signup/Signup';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Router>
+        <ToastContainer />
+
+
+        <Routes>
+          {/* <Route exact path="/" element={<Home />} /> */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          {/*<Route path="/event-list" element={<EventList />} />
+          <Route path="/my-events" element={<EventList />} />
+          <Route path="/event-details/:id" element={<EventDetails />} />
+          <Route path="/add-event" element={<AddEvent />} />
+          <Route path="/edit-event/:id" element={<AddEvent />} />
+          <Route path="/history" element={<BookingHistory />} />
+          <Route path="/customer-profile/:id" element={<CustomerProfile />} />
+          <Route
+            path="/event-organizer-profile/:id"
+            element={<EventOrganizerProfile />}
+          />
+          <Route path="/payment-success/:id" element={<PaymentSuccess />} />
+          <Route path="/payment-failure/:id" element={<PaymentFailure />} />
+          <Route
+            path="/event-organizer-analytics/:id"
+            element={<EventOrganizerAnalytics />}
+          /> */}
+        </Routes>
+      </Router>
+    </>
+
   );
 }
 
