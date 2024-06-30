@@ -31,9 +31,7 @@ const Login = () => {
             if (response.data.statusMessage === "Invalid user credentials") {
                 toast.error("Invalid user credentials");
             } else {
-                // response.data.data.userType === "User"
-                //     ? navigate("/event-list")
-                //     : navigate(`/event-organizer-analytics/id=${response.data.data.id}`);
+                navigate("/") //navigate to 2nd factor
             }
         }
     }
