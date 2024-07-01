@@ -11,7 +11,7 @@ const LoginSecondFactor = () => {
     const question = localStorage.getItem("question");
     const [answer, setAnswer] = useState();
 
-    const callSeconfFactorAuth = async () => {
+    const callSecondFactorAuth = async () => {
         if (answer) {
             const api_login_2_factor_url = ``//`${process.env.REACT_APP_BACKEND_URL}api/users/login`;
             const userData = {
@@ -33,7 +33,7 @@ const LoginSecondFactor = () => {
                 navigate("/login-2-factor") //navigate to 2nd factor
             }
         } else {
-
+            toast.error("Answer is required");
         }
     }
 
@@ -49,7 +49,7 @@ const LoginSecondFactor = () => {
                         value={answer}
                         onChange={(value) => setAnswer(value)}
                         type="text" />
-                    <SubmitButton buttonName="Login" callButtonFunction={callSeconfFactorAuth} />
+                    <SubmitButton buttonName="Submit" callButtonFunction={callSecondFactorAuth} />
                 </div>
             </div>
         </>

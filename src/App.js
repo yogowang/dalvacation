@@ -7,6 +7,7 @@ import Signup from './pages/authentication/signup/Signup';
 import LoginSecondFactor from './pages/authentication/login/LoginSecondFactor';
 import Footer from './components/footer/Footer';
 import Navbar from './components/navbar/Navbar';
+import LoginThirdFactor from './pages/authentication/login/LoginThirdFactor';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           {/* <Route exact path="/" element={<Home />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/login-2-factor" element={<LoginSecondFactor />} />
+          <Route path="/login-3-factor" element={<LoginThirdFactor />} />
           <Route path="/signup" element={<Signup />} />
           {/*<Route path="/event-list" element={<EventList />} />
           <Route path="/my-events" element={<EventList />} />

@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 const Footer = () => {
   const location = useLocation();
   const { pathname } = location;
-  const pathsWithAbsoluteFooter = ["/login", "/login-2-factor"];
+  const pathsWithAbsoluteFooter = ["/login", "/login-2-factor", "/login-3-factor"];
   const footerClass = pathsWithAbsoluteFooter.includes(pathname) ? "absolute bottom-0 w-screen" : "";
   return (
     <footer className={`body-font ${footerClass} bg-[#171719] text-[#83c5be]`}>
