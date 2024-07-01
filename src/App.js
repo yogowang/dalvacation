@@ -4,17 +4,21 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Signup from './pages/authentication/signup/Signup';
+import LoginSecondFactor from './pages/authentication/login/LoginSecondFactor';
+import Footer from './components/footer/Footer';
+import Navbar from './components/navbar/Navbar';
 
 function App() {
   return (
     <>
       <Router>
         <ToastContainer />
-
+        <Navbar />
 
         <Routes>
           {/* <Route exact path="/" element={<Home />} /> */}
           <Route path="/login" element={<Login />} />
+          <Route path="/login-2-factor" element={<LoginSecondFactor />} />
           <Route path="/signup" element={<Signup />} />
           {/*<Route path="/event-list" element={<EventList />} />
           <Route path="/my-events" element={<EventList />} />
@@ -34,6 +38,7 @@ function App() {
             element={<EventOrganizerAnalytics />}
           /> */}
         </Routes>
+        <Footer />
       </Router>
     </>
 

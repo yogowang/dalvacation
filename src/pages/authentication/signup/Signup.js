@@ -24,8 +24,6 @@ const Signup = () => {
 
     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     var passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,15}$/;
-    var nameRegex = /^[A-Za-z]+$/;
-
 
     const callSignUp = async () => {
         if (validate()) {
@@ -118,7 +116,7 @@ const Signup = () => {
             <ToastContainer />
             <div className="mt-20 text-center">
                 <h1 className="text-primary text-2xl font-bold">Sign Up</h1>
-                <div className="my-5 w-full max-w-sm space-y-4 mx-auto">
+                <div className="my-5 w-full max-w-md space-y-4 mx-auto">
                     <TextInput
                         placeholderText="Name"
                         onChange={(value) => setName(value)}

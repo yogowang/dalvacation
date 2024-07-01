@@ -4,7 +4,8 @@ import { useLocation } from "react-router-dom";
 const Footer = () => {
   const location = useLocation();
   const { pathname } = location;
-  const footerClass = pathname === "/login" ? "absolute bottom-0 w-screen" : "";
+  const pathsWithAbsoluteFooter = ["/login", "/login-2-factor"];
+  const footerClass = pathsWithAbsoluteFooter.includes(pathname) ? "absolute bottom-0 w-screen" : "";
   return (
     <footer className={`body-font ${footerClass} bg-[#171719] text-[#83c5be]`}>
       <div className="container mx-auto flex flex-col items-center px-5 py-8 sm:flex-row">
@@ -13,11 +14,11 @@ const Footer = () => {
           href="/"
         >
           <span className="ml-3 cursor-pointer text-xl text-[#83c5be]">
-            EventHub
+            Dal Vacation Home
           </span>
         </a>
         <p className="mt-4 text-sm text-[#83c5be] hover:text-yellow-500 sm:ml-4 sm:mt-0 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:pl-4">
-          © 2023 by Divyank Shah - B00966377
+          © 2024 by SDP Team 7
         </p>
         <span className="mt-4 inline-flex justify-center sm:ml-auto sm:mt-0 sm:justify-start">
           <a className="text-[#83c5be] hover:text-yellow-500" href="/">

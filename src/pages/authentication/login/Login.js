@@ -32,7 +32,9 @@ const Login = () => {
             if (response.data.statusMessage === "Invalid user credentials") {
                 toast.error("Invalid user credentials");
             } else {
-                navigate("/") //navigate to 2nd factor
+                localStorage.setItem("email", email);
+                localStorage.setItem("question", "question");
+                navigate("/login-2-factor") //navigate to 2nd factor
             }
         }
     }
