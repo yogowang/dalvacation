@@ -30,7 +30,7 @@ const LoginThirdFactor = () => {
             if (response.data.statusMessage === "Invalid user credentials") {
                 toast.error("Invalid user credentials");
             } else {
-                navigate("/login-2-factor") //navigate to 2nd factor
+                navigate("/") //navigate to home
             }
         } else {
             toast.error("Answer is required");

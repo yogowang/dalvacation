@@ -8,8 +8,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = () => {
-  const [dropDownMenu, setDropDownMenu] = useState(false);
-  const navigate = useNavigate();
+  // const [dropDownMenu, setDropDownMenu] = useState(false);
+  // const navigate = useNavigate();
   let Links = [
     {
       name: "ROOMS",
