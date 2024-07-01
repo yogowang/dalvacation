@@ -5,6 +5,7 @@ import SelectInput from "../../../components/input/SelectInput";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import userRoles from "../../../assets/jsonfile/userRole.json"
 
 const Login = () => {
     const navigate = useNavigate();
@@ -56,7 +57,7 @@ const Login = () => {
             <ToastContainer />
             <div className="mt-20 text-center">
                 <h1 className="text-primary text-2xl font-bold">Login</h1>
-                <div className="mx-auto my-2 w-3/4 p-2 text-center md:w-1/2 lg:w-1/4">
+                <div className="my-5 w-full max-w-sm space-y-4 mx-auto">
                     <TextInput placeholderText="Email"
                         value={email}
                         onChange={(value) => setEmail(value)}
@@ -65,10 +66,11 @@ const Login = () => {
                         value={password}
                         onChange={(value) => setPassword(value)}
                         type="password" />
-
                     <SelectInput
+                        optionList={userRoles}
                         value={userType}
                         onChange={(value) => setUserType(value)}
+                        listName={"User Type"}
                     />
                     <SubmitButton buttonName="Login" callButtonFunction={callLogin} />
                     <p className="cursor-pointer text-center">

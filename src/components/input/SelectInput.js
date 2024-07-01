@@ -1,22 +1,29 @@
 import React from "react";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import FormControl from '@mui/material/FormControl';
 
-const SelectInput = ({ value, onChange }) => {
+const SelectInput = ({ value, onChange, listName, optionList }) => {
   return (
     <>
-      <div className="flex py-2">
-        <select
-          placeholder="User Type"
-          className="h-12 w-full rounded-md border-2 border-blue-300 px-2 disabled:border-blue-200"
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">{listName}</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
           value={value}
+          label={listName}
           onChange={(e) => {
             onChange && onChange(e.target.value);
           }}
+          className="text-left"
         >
-          <option name="ut">User Type</option>
-          <option name="customer">User</option>
-          <option name="serviceProvider">Event Organizer</option>
-        </select>
-      </div>
+          {optionList.map((event) => (
+            <MenuItem value={event}>{event}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </>
   );
 };

@@ -1,26 +1,26 @@
 import React from "react";
+import TextField from '@mui/material/TextField';
+
 const TextInput = ({
-  className,
   type,
   placeholderText,
   value,
   onChange,
-  disabled = false,
 }) => {
   return (
-    <div className="flex flex-col py-2">
-      <input
-        className={`${className} mb-2 h-12 w-100 rounded-md border-2 border-blue-300 px-2 disabled:border-blue-200`}
-        type={type}
-        placeholder={placeholderText}
+    <>
+      <TextField
+        id="outlined-basic"
+        label={placeholderText}
+        variant="outlined"
+        className="w-full"
         value={value}
+        type={type}
         onChange={(e) => {
           onChange && onChange(e.target.value);
         }}
-        disabled={disabled}
-        min={type === "number" ? 0 : undefined}
-      ></input>
-    </div>
+      />
+    </>
   );
 };
 

@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import SelectInput from "../../../components/input/SelectInput";
 import axios from "axios";
+import mfaQuestions from "../../../assets/jsonfile/mfaSecurityQuestions.json"
+import userRoles from "../../../assets/jsonfile/userRole.json"
 
 const Signup = () => {
     const navigate = useNavigate()
@@ -16,6 +18,9 @@ const Signup = () => {
     const [age, setAge] = useState();
     const [gender, setGender] = useState();
     const [address, setAddress] = useState();
+    const [question, setQuestion] = useState();
+    const [answer, setAnswer] = useState();
+    const [caeserCipherKey, setCaeserCipherKey] = useState();
 
     var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     var passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,15}$/;
@@ -35,26 +40,24 @@ const Signup = () => {
                 address: address
             };
 
-            const backend_signup_url = ``; //`${process.env.REACT_APP_BACKEND_URL}api/users/signup`;
 
-            console.log("backend url: ", backend_signup_url);
+            const api_signup_url = ``; //`${process.env.REACT_APP_BACKEND_URL}api/users/signup`;
 
-            const response = await axios.post(backend_signup_url, userData);
+            console.log("backend url: ", api_signup_url);
+
+            const response = await axios.post(api_signup_url, userData);
 
             if (response.data.statusMessage === "User already exists") {
                 toast.error("User already exists");
             } else {
-                navigate("/") // navigate to 2nd factor
+                navigate("/") // navigate to email confirmation
             }
         }
     }
 
     const validate = () => {
-        if (name === "") {
+        if (!name) {
             toast.error("Name is required");
-            return false;
-        } else if (!nameRegex.test(name)) {
-            toast.error("Name can only have alphabets");
             return false;
         } else if (!email) {
             toast.error("Email is required");
@@ -96,21 +99,28 @@ const Signup = () => {
         } else if (!gender) {
             toast.error("Gender is required.");
             return false;
+        } else if (!question) {
+            toast.error("Security Question is required.");
+            return false;
+        } else if (!answer) {
+            toast.error("Answer is required.");
+            return false;
+        } else if (!caeserCipherKey) {
+            toast.error("Caeser Cipher Key is required.");
+            return false;
         }
 
         return true;
     }
-
 
     return (
         <>
             <ToastContainer />
             <div className="mt-20 text-center">
                 <h1 className="text-primary text-2xl font-bold">Sign Up</h1>
-                <div className="mx-auto my-2 w-3/4 p-2 text-center md:w-1/2 lg:w-1/4">
+                <div className="my-5 w-full max-w-sm space-y-4 mx-auto">
                     <TextInput
                         placeholderText="Name"
-                        value={name}
                         onChange={(value) => setName(value)}
                         type="text"
                     />
@@ -120,47 +130,60 @@ const Signup = () => {
                         onChange={(value) => setEmail(value)}
                         type="email"
                     />
-
                     <TextInput
                         placeholderText="Mobile Number"
                         value={mobileNumber}
                         onChange={(value) => setMobileNumber(value)}
                         type="number"
                     />
-
                     <TextInput
                         placeholderText="Age"
                         value={age}
                         onChange={(value) => setAge(value)}
                         type="number"
                     />
-
                     <TextInput
                         placeholderText="Gender"
                         value={gender}
                         onChange={(value) => setGender(value)}
                         type="text"
                     />
-
                     <TextInput
                         placeholderText="Address"
                         value={address}
                         onChange={(value) => setAddress(value)}
                         type="text"
                     />
-
                     <SelectInput
+                        optionList={userRoles}
                         value={userType}
                         onChange={(value) => setUserType(value)}
+                        listName={"User Type"}
                     />
-
                     <TextInput
                         placeholderText="Password"
                         value={password}
                         onChange={(value) => setPassword(value)}
                         type="password"
                     />
-
+                    <SelectInput
+                        optionList={mfaQuestions}
+                        value={question}
+                        onChange={(value) => setQuestion(value)}
+                        listName={"Security Question"}
+                    />
+                    <TextInput
+                        placeholderText="Answer"
+                        value={answer}
+                        onChange={(value) => setAnswer(value)}
+                        type="text"
+                    />
+                    <TextInput
+                        placeholderText="Caeser Cipher Key"
+                        value={caeserCipherKey}
+                        onChange={(value) => setCaeserCipherKey(value)}
+                        type="text"
+                    />
                     <SubmitButton buttonName="Signup" callButtonFunction={callSignUp} />
                     <p className="cursor-pointer text-center">
                         Already ave an account?{" "}
@@ -171,7 +194,7 @@ const Signup = () => {
                         </Link>
                     </p>
                 </div>
-            </div >
+            </div>
         </>
     )
 }
