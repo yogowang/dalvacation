@@ -167,6 +167,18 @@ Resources:
       ParentId: !GetAtt UserAuthenticationApiLoginResource.ResourceId
       PathPart: "1st"
 
+  UserAuthenticationApiLogin2ndResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      ParentId: !GetAtt UserAuthenticationApiLoginResource.ResourceId
+      PathPart: "2nd"
+  UserAuthenticationApiLogin3rdResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      ParentId: !GetAtt UserAuthenticationApiLoginResource.ResourceId
+      PathPart: "3rd"
   SignUpMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -244,7 +256,56 @@ Resources:
           - StatusCode: "200"
             ResponseTemplates:
               application/json: ""
-
+  SecondLoginMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      ResourceId: !Ref UserAuthenticationApiLogin2ndResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri: 
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaLogin2ndFactor.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+  ThirdLoginMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      ResourceId: !Ref UserAuthenticationApiLogin3rdResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri: 
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaLogin3rdFactor.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
   UserAuthenticationApiStage:
     Type: AWS::ApiGateway::Stage
     Properties:
@@ -258,5 +319,7 @@ Resources:
       - SignUpMethod
       - ConfirmationMethod
       - FirstLoginMethod
+      - SecondLoginMethod
+      - ThirdLoginMethod
     Properties:
       RestApiId: !Ref UserAuthenticationApiGateway
