@@ -65,7 +65,7 @@ Resources:
         MemorySize: 512
         Environment:
           Variables:
-            UserQuestionDalVacationDynamoTableName: !Ref UserQuestionDalVacationDynamoTable
+            UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
         Code:
           S3Bucket: "dalvacation-lambda-bucket-yuci"
           S3Key: "LambdaLogin2ndFactor.zip"
@@ -84,23 +84,6 @@ Resources:
         Code:
           S3Bucket: "dalvacation-lambda-bucket-yuci"
           S3Key: "LambdaLogin3rdFactor.zip"
-  UserQuestionDalVacationDynamoTable:
-    Type: AWS::DynamoDB::Table
-    Properties:
-     TableName: UserQuestionDalVacation
-     AttributeDefinitions:
-        - AttributeName: "email"
-          AttributeType: "S"
-        - AttributeName : "question_id"
-          AttributeType: "S"
-     KeySchema:
-        - AttributeName: "email"
-          KeyType: "HASH"
-        - AttributeName: "question_id"
-          KeyType: "RANGE"
-     ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
 
   UserDalVacationDynamoTable:
     Type: AWS::DynamoDB::Table

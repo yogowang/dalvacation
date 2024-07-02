@@ -5,18 +5,17 @@ const ddbClient = new DynamoDBClient({});
 const dynamo = DynamoDBDocumentClient.from(ddbClient);
 
 export const handler = async (event) => {
-  const { email,question_id ,answer } = JSON.parse(event.body);
+  const { email ,answer } = JSON.parse(event.body);
   let responseBody = "";
   let statusCode = 0;
-  const tableName = process.env.UserQuestionDalVacationDynamoTableName;
+  const tableName = process.env.UserDalVacationDynamoTableName;
 
   try {
     const user = await dynamo.send(
       new GetCommand({
         TableName: tableName,
         Key: {
-          email: email,
-          question_id:question_id
+          email: email
         },
       })
     );
