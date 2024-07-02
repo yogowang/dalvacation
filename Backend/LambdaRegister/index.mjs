@@ -8,7 +8,7 @@ const dynamo = DynamoDBDocumentClient.from(ddbClient);
 const cognitoClient = new CognitoIdentityProviderClient({ region: 'us-east-1' });
 
 export const handler = async (event) => {
-  const { user_type, fullname, email, password, userName, phone_no, age, address, question, answer, key } = JSON.parse(event.body);
+  const { user_type, fullname, email, password, userName, phone_no, age, address, question, answer, key } = event;
   let responseBody = "";
   let statusCode = 0;
   const tableName = process.env.UserDalVacationDynamoTableName;

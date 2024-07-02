@@ -1,11 +1,11 @@
 import { CognitoIdentityProviderClient, AdminConfirmSignUpCommand } from "@aws-sdk/client-cognito-identity-provider";
 
 const cognitoClient = new CognitoIdentityProviderClient({ region: 'us-east-1' });
-const userPoolId = process.env.DalVacationHomeUserPoolId; 
-const clientId = process.env.DalVacationHomeAppClientId; 
+const userPoolId = process.env.DalVacationHomeUserPoolId;
+const clientId = process.env.DalVacationHomeAppClientId;
 
 export const handler = async (event) => {
-  const { email, confirmationCode } = JSON.parse(event.body);
+  const { email, confirmationCode } = event;
   let responseBody = "";
   let statusCode = 0;
 
