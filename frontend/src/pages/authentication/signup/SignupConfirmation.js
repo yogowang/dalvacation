@@ -12,7 +12,7 @@ const SignupConfirmation = () => {
 
     const callConfirmationCode = async () => {
         if (confirmationCode) {
-            const api_confirmation_code_factor_url = ``//`${process.env.REACT_APP_BACKEND_URL}api/users/login`;
+            const api_confirmation_code_factor_url = `https://t2yrjbo7s6.execute-api.us-east-1.amazonaws.com/dalvacationhome-signup-confirmation/authentication/signup/confirmation`//`${process.env.REACT_APP_BACKEND_URL}api/users/login`;
             const userData = {
                 email: email,
                 confirmationCode: confirmationCode,
@@ -25,10 +25,12 @@ const SignupConfirmation = () => {
                 userData
             );
 
-            if (response.data.statusMessage === "Invalid user credentials") {
-                toast.error("Invalid user credentials");
+            console.log(response);
+
+            if (response.data.statusCode === 200) {
+                navigate("/")
             } else {
-                navigate("/") //navigate to home
+                toast.error("Invalid confirmation code");
             }
         } else {
             toast.error("Answer is required");

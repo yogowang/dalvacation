@@ -1,13 +1,12 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Iac for Dal Vacation Home
 Resources:
-
   LambdaRegister:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: "LambdaRegister"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -17,7 +16,7 @@ Resources:
           DalVacationHomeUserPoolId: !Ref UserPool
           DalVacationHomeAppClientId: !Ref UserPoolClient
       Code:
-        S3Bucket: "dalvacation-lambda-bucket-yuci"
+        S3Bucket: "dalvacationhome-backend"
         S3Key: "LambdaRegister.zip"
 
   LambdaConfirmUser:
@@ -25,7 +24,7 @@ Resources:
     Properties:
       FunctionName: "LambdaConfirmUser"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -34,15 +33,15 @@ Resources:
           DalVacationHomeUserPoolId: !Ref UserPool
           DalVacationHomeAppClientId: !Ref UserPoolClient
       Code:
-        S3Bucket: "dalvacation-lambda-bucket-yuci"
+        S3Bucket: "dalvacationhome-backend"
         S3Key: "LambdaConfirmUser.zip"
-  
+
   LambdaLogin1stFactor:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: "LambdaLogin1stFactor"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -51,51 +50,51 @@ Resources:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
           DalVacationHomeAppClientId: !Ref UserPoolClient
       Code:
-        S3Bucket: "dalvacation-lambda-bucket-yuci"
+        S3Bucket: "dalvacationhome-backend"
         S3Key: "LambdaLogin1stFactor.zip"
 
   LambdaLogin2ndFactor:
-      Type: AWS::Lambda::Function
-      Properties:
-        FunctionName: "LambdaLogin2ndFactor"
-        Runtime: "nodejs20.x"
-        Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
-        Handler: "index.handler"
-        Timeout: 120
-        MemorySize: 512
-        Environment:
-          Variables:
-            UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
-        Code:
-          S3Bucket: "dalvacation-lambda-bucket-yuci"
-          S3Key: "LambdaLogin2ndFactor.zip"
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaLogin2ndFactor"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
+      Code:
+        S3Bucket: "dalvacationhome-backend"
+        S3Key: "LambdaLogin2ndFactor.zip"
   LambdaLogin3rdFactor:
-      Type: AWS::Lambda::Function
-      Properties:
-        FunctionName: "LambdaLogin3rdFactor"
-        Runtime: "nodejs20.x"
-        Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
-        Handler: "index.handler"
-        Timeout: 120
-        MemorySize: 512
-        Environment:
-          Variables:
-            UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
-        Code:
-          S3Bucket: "dalvacation-lambda-bucket-yuci"
-          S3Key: "LambdaLogin3rdFactor.zip"
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaLogin3rdFactor"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
+      Code:
+        S3Bucket: "dalvacationhome-backend"
+        S3Key: "LambdaLogin3rdFactor.zip"
 
   UserDalVacationDynamoTable:
     Type: AWS::DynamoDB::Table
     Properties:
-     TableName: UserDalVacation
-     AttributeDefinitions:
+      TableName: UserDalVacation
+      AttributeDefinitions:
         - AttributeName: "email"
           AttributeType: "S"
-     KeySchema:
+      KeySchema:
         - AttributeName: "email"
           KeyType: "HASH"
-     ProvisionedThroughput:
+      ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
 
@@ -126,7 +125,7 @@ Resources:
         - COGNITO
 
   # API GATEWAY
-  
+
   UserAuthenticationApiGateway:
     Type: AWS::ApiGateway::RestApi
     Properties:
@@ -183,9 +182,9 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS
-        Uri: 
+        Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaRegister.Arn}/invocations"
-        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        Credentials: "arn:aws:iam::909715103412:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -209,9 +208,9 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS
-        Uri: 
+        Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaConfirmUser.Arn}/invocations"
-        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        Credentials: "arn:aws:iam::909715103412:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -235,9 +234,9 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS
-        Uri: 
+        Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaLogin1stFactor.Arn}/invocations"
-        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        Credentials: "arn:aws:iam::909715103412:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:

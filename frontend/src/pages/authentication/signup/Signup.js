@@ -28,27 +28,35 @@ const Signup = () => {
     const callSignUp = async () => {
         if (validate()) {
             const userData = {
-                name: name,
+                user_type: userType.toLowerCase(),
+                fullname: name,
                 email: email,
                 password: password,
-                userType: userType,
-                mobileNumber: mobileNumber,
+                userName: email,
+                phone_no: mobileNumber,
                 age: age,
-                gender: gender,
-                address: address
+                address: address,
+                question: question,
+                answer: answer,
+                key: caeserCipherKey
             };
 
+            console.log(userData);
 
-            const api_signup_url = ``; //`${process.env.REACT_APP_BACKEND_URL}api/users/signup`;
+            const api_signup_url = `https://t2yrjbo7s6.execute-api.us-east-1.amazonaws.com/dalvacationhome-signup/authentication/signup`; //`${process.env.REACT_APP_BACKEND_URL}api/users/signup`;
 
             console.log("backend url: ", api_signup_url);
 
             const response = await axios.post(api_signup_url, userData);
+            console.log(response);
 
-            if (response.data.statusMessage === "User already exists") {
+            if (response.data.statusCode === 500) {
                 toast.error("User already exists");
+            } else if (response.data.statusCode === 200) {
+                localStorage.setItem("email", email)
+                navigate("/signup-confirmation")
             } else {
-                navigate("/") // navigate to email confirmation
+                toast.error("Unable to register")
             }
         }
     }
@@ -129,10 +137,10 @@ const Signup = () => {
                         type="email"
                     />
                     <TextInput
-                        placeholderText="Mobile Number"
+                        placeholderText="Mobile Number (+1 1234567890)"
                         value={mobileNumber}
                         onChange={(value) => setMobileNumber(value)}
-                        type="number"
+                        type="text"
                     />
                     <TextInput
                         placeholderText="Age"

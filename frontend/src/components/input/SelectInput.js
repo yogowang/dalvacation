@@ -20,7 +20,7 @@ const SelectInput = ({ value, onChange, listName, optionList }) => {
           className="text-left"
         >
           {optionList.map((event) => (
-            <MenuItem value={event}>{event}</MenuItem>
+            <MenuItem value={event}>{event.replace("_", " ")}</MenuItem>
           ))}
         </Select>
       </FormControl>
