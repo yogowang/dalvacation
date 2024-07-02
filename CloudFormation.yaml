@@ -1,0 +1,262 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Iac for Dal Vacation Home
+Resources:
+
+  LambdaRegister:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaRegister"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
+          DalVacationHomeUserPoolId: !Ref UserPool
+          DalVacationHomeAppClientId: !Ref UserPoolClient
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci"
+        S3Key: "LambdaRegister.zip"
+
+  LambdaConfirmUser:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaConfirmUser"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          DalVacationHomeUserPoolId: !Ref UserPool
+          DalVacationHomeAppClientId: !Ref UserPoolClient
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci"
+        S3Key: "LambdaConfirmUser.zip"
+  
+  LambdaLogin1stFactor:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaLogin1stFactor"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
+          DalVacationHomeAppClientId: !Ref UserPoolClient
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci"
+        S3Key: "LambdaLogin1stFactor.zip"
+
+  LambdaLogin2ndFactor:
+      Type: AWS::Lambda::Function
+      Properties:
+        FunctionName: "LambdaLogin2ndFactor"
+        Runtime: "nodejs20.x"
+        Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+        Handler: "index.handler"
+        Timeout: 120
+        MemorySize: 512
+        Environment:
+          Variables:
+            UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
+        Code:
+          S3Bucket: "dalvacation-lambda-bucket-yuci"
+          S3Key: "LambdaLogin2ndFactor.zip"
+  LambdaLogin3rdFactor:
+      Type: AWS::Lambda::Function
+      Properties:
+        FunctionName: "LambdaLogin3rdFactor"
+        Runtime: "nodejs20.x"
+        Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+        Handler: "index.handler"
+        Timeout: 120
+        MemorySize: 512
+        Environment:
+          Variables:
+            UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
+        Code:
+          S3Bucket: "dalvacation-lambda-bucket-yuci"
+          S3Key: "LambdaLogin3rdFactor.zip"
+
+  UserDalVacationDynamoTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+     TableName: UserDalVacation
+     AttributeDefinitions:
+        - AttributeName: "email"
+          AttributeType: "S"
+     KeySchema:
+        - AttributeName: "email"
+          KeyType: "HASH"
+     ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: DALVacationHomeUserPool
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireNumbers: true
+      MfaConfiguration: "OFF"
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref UserPool
+      ClientName: DALVacationHomeAppClient
+      GenerateSecret: false
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      SupportedIdentityProviders:
+        - COGNITO
+
+  # API GATEWAY
+  
+  UserAuthenticationApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: UserAuthenticationApiGateway
+
+  UserAuthenticationApiAuthenticationResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      ParentId: !GetAtt UserAuthenticationApiGateway.RootResourceId
+      PathPart: "authentication"
+
+  UserAuthenticationApiSignupResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      ParentId: !GetAtt UserAuthenticationApiAuthenticationResource.ResourceId
+      PathPart: "signup"
+
+  UserAuthenticationApiLoginResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      ParentId: !GetAtt UserAuthenticationApiAuthenticationResource.ResourceId
+      PathPart: "login"
+
+  UserAuthenticationApiSignupConfirmationResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      ParentId: !GetAtt UserAuthenticationApiSignupResource.ResourceId
+      PathPart: "confirmation"
+
+  UserAuthenticationApiLogin1stResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      ParentId: !GetAtt UserAuthenticationApiLoginResource.ResourceId
+      PathPart: "1st"
+
+  SignUpMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      ResourceId: !Ref UserAuthenticationApiSignupResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri: 
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaRegister.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+
+  ConfirmationMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      ResourceId: !Ref UserAuthenticationApiSignupConfirmationResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri: 
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaConfirmUser.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+
+  FirstLoginMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      ResourceId: !Ref UserAuthenticationApiLogin1stResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri: 
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaLogin1stFactor.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+
+  UserAuthenticationApiStage:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
+      DeploymentId: !Ref UserAuthenticationApiDeployment
+      StageName: v1
+
+  UserAuthenticationApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - SignUpMethod
+      - ConfirmationMethod
+      - FirstLoginMethod
+    Properties:
+      RestApiId: !Ref UserAuthenticationApiGateway
