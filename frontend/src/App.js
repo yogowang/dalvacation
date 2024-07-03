@@ -9,6 +9,7 @@ import Footer from './components/footer/Footer';
 import Navbar from './components/navbar/Navbar';
 import LoginThirdFactor from './pages/authentication/login/LoginThirdFactor';
 import SignupConfirmation from './pages/authentication/signup/SignupConfirmation';
+import Home from './pages/home/Home';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         <Navbar />
 
         <Routes>
-          {/* <Route exact path="/" element={<Home />} /> */}
+          <Route exact path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/login-2-factor" element={<LoginSecondFactor />} />
           <Route path="/login-3-factor" element={<LoginThirdFactor />} />
