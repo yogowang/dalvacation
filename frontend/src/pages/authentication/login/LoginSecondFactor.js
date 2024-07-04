@@ -13,7 +13,7 @@ const LoginSecondFactor = () => {
 
     const callSecondFactorAuth = async () => {
         if (answer) {
-            const api_login_2_factor_url = ``//`${process.env.REACT_APP_BACKEND_URL}api/users/login`;
+            const api_login_2_factor_url = `https://qz7jhm2dvd.execute-api.us-east-1.amazonaws.com/login-factor-two/authentication/login/2nd`
             const userData = {
                 email: email,
                 question: question,
@@ -26,11 +26,12 @@ const LoginSecondFactor = () => {
                 api_login_2_factor_url,
                 userData
             );
+            console.log(response);
 
-            if (response.data.statusMessage === "Invalid user credentials") {
-                toast.error("Invalid user credentials");
+            if (response.data.statusCode === 200) {
+                navigate("/login-3-factor") //navigate to 2nd factor
             } else {
-                navigate("/login-2-factor") //navigate to 2nd factor
+                toast.error(response.data.body);
             }
         } else {
             toast.error("Answer is required");

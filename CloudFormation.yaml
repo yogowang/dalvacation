@@ -271,9 +271,9 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS
-        Uri: 
+        Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaLogin2ndFactor.Arn}/invocations"
-        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        Credentials: "arn:aws:iam::909715103412:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -296,9 +296,9 @@ Resources:
       Integration:
         IntegrationHttpMethod: POST
         Type: AWS
-        Uri: 
+        Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaLogin3rdFactor.Arn}/invocations"
-        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        Credentials: "arn:aws:iam::909715103412:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:

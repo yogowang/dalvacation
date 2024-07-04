@@ -20,7 +20,7 @@ const caesarCipherDecrypt = (str, key) => {
 };
 
 export const handler = async (event) => {
-  const { email,word, decryptedWord } = JSON.parse(event.body);
+  const { email, word, decryptedWord } = event;
   let responseBody = "";
   let statusCode = 0;
   const tableName = process.env.UserDalVacationDynamoTableName;
