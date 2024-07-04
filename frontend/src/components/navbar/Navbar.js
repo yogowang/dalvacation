@@ -22,7 +22,7 @@ const Navbar = () => {
   return (
     <>
       <div className="fixed left-0 top-0 z-10 w-full">
-        <div className="items-center justify-between bg-[#006d77] px-7 py-4 md:flex md:px-10 text-white">
+        <div className="items-center justify-between bg-[#171719] px-7 py-4 md:flex md:px-10 text-[#3498DB]">
           {/* logo section */}
           <Link
             to={"/"}
@@ -42,14 +42,14 @@ const Navbar = () => {
             )}
           </div>
           <ul
-            className={`absolute left-0 z-[-1] w-full bg-[#006d77] text-white pb-12 pl-9 transition-all duration-500 ease-in md:static md:z-auto md:flex md:w-auto md:items-center md:pb-0 md:pl-0 ${open ? "top-12" : "top-[-490px]"
+            className={`absolute left-0 z-[-1] w-full text-white pb-12 pl-9 transition-all duration-500 ease-in md:static md:z-auto md:flex md:w-auto md:items-center md:pb-0 md:pl-0 ${open ? "top-12" : "top-[-490px]"
               }`}
           >
             {Links.map((link) => (
               <li className="my-7 font-semibold md:my-0 md:ml-8">
                 <a
                   href={link.link}
-                  className="text-white duration-500 hover:text-orange-400"
+                  className="text-white duration-500 hover:text-yellow-500"
                 >
                   {link.name}
                 </a>

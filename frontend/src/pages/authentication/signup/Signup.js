@@ -43,7 +43,7 @@ const Signup = () => {
 
             console.log(userData);
 
-            const api_signup_url = `https://t2yrjbo7s6.execute-api.us-east-1.amazonaws.com/dalvacationhome-signup/authentication/signup`; //`${process.env.REACT_APP_BACKEND_URL}api/users/signup`;
+            const api_signup_url = `https://qz7jhm2dvd.execute-api.us-east-1.amazonaws.com/signup/authentication/signup`; //`${process.env.REACT_APP_BACKEND_URL}api/users/signup`;
 
             console.log("backend url: ", api_signup_url);
 
@@ -51,7 +51,7 @@ const Signup = () => {
             console.log(response);
 
             if (response.data.statusCode === 500) {
-                toast.error("User already exists");
+                toast.error(response.data.body);
             } else if (response.data.statusCode === 200) {
                 localStorage.setItem("email", email)
                 navigate("/signup-confirmation")

@@ -3,7 +3,7 @@ import { CognitoIdentityProviderClient, InitiateAuthCommand } from "@aws-sdk/cli
 const cognitoClient = new CognitoIdentityProviderClient({ region: 'us-east-1' });
 
 export const handler = async (event) => {
-  const { email, password } = JSON.parse(event.body);
+  const { email, password } = event;
   let responseBody = "";
   let statusCode = 0;
 

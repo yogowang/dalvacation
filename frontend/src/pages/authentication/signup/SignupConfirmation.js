@@ -12,7 +12,7 @@ const SignupConfirmation = () => {
 
     const callConfirmationCode = async () => {
         if (confirmationCode) {
-            const api_confirmation_code_factor_url = `https://t2yrjbo7s6.execute-api.us-east-1.amazonaws.com/dalvacationhome-signup-confirmation/authentication/signup/confirmation`//`${process.env.REACT_APP_BACKEND_URL}api/users/login`;
+            const api_confirmation_code_factor_url = `https://qz7jhm2dvd.execute-api.us-east-1.amazonaws.com/user-confirmation/authentication/signup/confirmation`//`${process.env.REACT_APP_BACKEND_URL}api/users/login`;
             const userData = {
                 email: email,
                 confirmationCode: confirmationCode,

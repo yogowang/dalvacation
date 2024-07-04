@@ -15,7 +15,7 @@ const Login = () => {
 
     const callLogin = async () => {
         if (validate()) {
-            const api_login_url = ``//`${process.env.REACT_APP_BACKEND_URL}api/users/login`;
+            const api_login_url = `https://qz7jhm2dvd.execute-api.us-east-1.amazonaws.com/login-factore-one/authentication/login/1st`
             const userData = {
                 email: email,
                 password: password,
@@ -28,13 +28,14 @@ const Login = () => {
                 api_login_url,
                 userData
             );
+            console.log(response);
 
-            if (response.data.statusMessage === "Invalid user credentials") {
-                toast.error("Invalid user credentials");
-            } else {
+            if (response.data.statusCode === 200) {
                 localStorage.setItem("email", email);
                 localStorage.setItem("question", "question");
                 navigate("/login-2-factor") //navigate to 2nd factor
+            } else {
+                toast.error(response.data.body);
             }
         }
     }
