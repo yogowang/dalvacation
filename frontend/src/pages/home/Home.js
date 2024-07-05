@@ -1,25 +1,13 @@
 import React, { useState, useEffect } from "react";
 import background from "../../assets/images/background.jpg";
 import { useNavigate } from "react-router-dom";
-// import EventCard from "../../components/card/EventCard";
-import axios from "axios";
 import HomePageRoom from "../../components/card/HomePageRoom";
 
 const Home = () => {
   const navigate = useNavigate();
-  const [event, setEvents] = useState([]);
-  const backend_all_events_url = `${process.env.REACT_APP_BACKEND_URL}api/events/`;
-
-  const currentDate = new Date();
-  // Get year, month, and day
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // Month starts from 0, so add 1
-  const day = String(currentDate.getDate()).padStart(2, "0");
-
-  const todayDate = `${year}-${month}-${day}`;
 
   const callButtonFunction = () => {
-    navigate("/"); //Navigate to Home list
+    navigate("/"); //Navigate to Room list
   };
 
   return (
