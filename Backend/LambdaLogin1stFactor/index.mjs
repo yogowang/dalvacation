@@ -13,7 +13,7 @@ export const handler = async (event) => {
   const tableName = process.env.UserDalVacationDynamoTableName;
 
   try {
-    const authParams = { 
+    const authParams = {
       AuthFlow: 'USER_PASSWORD_AUTH',
       ClientId: process.env.DalVacationHomeAppClientId,
       AuthParameters: {
@@ -34,7 +34,7 @@ export const handler = async (event) => {
       })
     );
 
-    const userQAQuestion = "N/A";
+    let userQAQuestion = "N/A";
     if (user.Item) {
       userQAQuestion = user.Item.question;
     } else {
@@ -42,7 +42,7 @@ export const handler = async (event) => {
       statusCode = 404;
     }
 
-    responseBody = JSON.stringify(authResponse, userQAQuestion);
+    responseBody = { authResponse, userQAQuestion }
     statusCode = 200;
   } catch (error) {
     responseBody = `Login failed: ${error.message}`;
@@ -56,5 +56,6 @@ export const handler = async (event) => {
     },
     body: responseBody
   };
+  console.log(response)
   return response;
 };

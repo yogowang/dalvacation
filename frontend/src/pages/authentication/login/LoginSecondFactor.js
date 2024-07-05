@@ -45,7 +45,7 @@ const LoginSecondFactor = () => {
                 <h1 className="text-primary text-2xl font-bold">Login - 2nd Factor Authentication</h1>
                 <h2 className="my-3 text-primary text-xl">Please answer the below question as a part of multifactor authentication.</h2>
                 <div className="my-5 w-full max-w-sm space-y-4 mx-auto">
-                    <p>What is name of your school ?{question}</p>
+                    <p>{question}</p>
                     <TextInput placeholderText="Answer"
                         value={answer}
                         onChange={(value) => setAnswer(value)}
