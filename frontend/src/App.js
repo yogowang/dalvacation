@@ -12,6 +12,7 @@ import SignupConfirmation from './pages/authentication/signup/SignupConfirmation
 import { RoomDetailsIndex } from './pages/room-details';
 import { AddRoomDetails } from './pages/room-details/AddRoomDetails/AddRoomDetails';
 import { UpdateRoomDetails } from './pages/room-details/UpdateRoomDetails/UpdateRoomDetails';
+import Home from './pages/home/Home';
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
         <Navbar />
 
         <Routes>
-          {/* <Route exact path="/" element={<Home />} /> */}
+          <Route exact path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/login-2-factor" element={<LoginSecondFactor />} />
           <Route path="/login-3-factor" element={<LoginThirdFactor />} />

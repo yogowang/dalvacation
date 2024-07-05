@@ -13,7 +13,7 @@ const LoginSecondFactor = () => {
 
     const callSecondFactorAuth = async () => {
         if (answer) {
-            const api_login_2_factor_url = ``//`${process.env.REACT_APP_BACKEND_URL}api/users/login`;
+            const api_login_2_factor_url = `https://qz7jhm2dvd.execute-api.us-east-1.amazonaws.com/login-factor-two/authentication/login/2nd`
             const userData = {
                 email: email,
                 question: question,
@@ -26,11 +26,12 @@ const LoginSecondFactor = () => {
                 api_login_2_factor_url,
                 userData
             );
+            console.log(response);
 
-            if (response.data.statusMessage === "Invalid user credentials") {
-                toast.error("Invalid user credentials");
+            if (response.data.statusCode === 200) {
+                navigate("/login-3-factor") //navigate to 2nd factor
             } else {
-                navigate("/login-2-factor") //navigate to 2nd factor
+                toast.error(response.data.body);
             }
         } else {
             toast.error("Answer is required");
@@ -44,7 +45,7 @@ const LoginSecondFactor = () => {
                 <h1 className="text-primary text-2xl font-bold">Login - 2nd Factor Authentication</h1>
                 <h2 className="my-3 text-primary text-xl">Please answer the below question as a part of multifactor authentication.</h2>
                 <div className="my-5 w-full max-w-sm space-y-4 mx-auto">
-                    <p>What is name of your school ?{question}</p>
+                    <p>{question}</p>
                     <TextInput placeholderText="Answer"
                         value={answer}
                         onChange={(value) => setAnswer(value)}

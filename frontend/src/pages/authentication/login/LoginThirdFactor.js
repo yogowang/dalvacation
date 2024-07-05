@@ -13,10 +13,10 @@ const LoginThirdFactor = () => {
 
     const callThirdFactorAuth = async () => {
         if (decryptedWord) {
-            const api_login_3_factor_url = ``//`${process.env.REACT_APP_BACKEND_URL}api/users/login`;
+            const api_login_3_factor_url = `https://qz7jhm2dvd.execute-api.us-east-1.amazonaws.com/login-factor-three/authentication/login/3rd`
             const userData = {
                 email: email,
-                randomWord: randomWord,
+                word: randomWord,
                 decryptedWord: decryptedWord
             };
 
@@ -27,10 +27,12 @@ const LoginThirdFactor = () => {
                 userData
             );
 
-            if (response.data.statusMessage === "Invalid user credentials") {
-                toast.error("Invalid user credentials");
-            } else {
+            console.log(response);
+
+            if (response.data.statusCode === 200) {
                 navigate("/") //navigate to home
+            } else {
+                toast.error(response.data.body);
             }
         } else {
             toast.error("Answer is required");
