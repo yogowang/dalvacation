@@ -6,7 +6,7 @@ Resources:
     Properties:
       FunctionName: "LambdaRegister"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::160536684166:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -16,7 +16,7 @@ Resources:
           DalVacationHomeUserPoolId: !Ref UserPool
           DalVacationHomeAppClientId: !Ref UserPoolClient
       Code:
-        S3Bucket: "dalvacationhome-backend"
+        S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "LambdaRegister.zip"
 
   LambdaConfirmUser:
@@ -24,7 +24,7 @@ Resources:
     Properties:
       FunctionName: "LambdaConfirmUser"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::160536684166:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -33,7 +33,7 @@ Resources:
           DalVacationHomeUserPoolId: !Ref UserPool
           DalVacationHomeAppClientId: !Ref UserPoolClient
       Code:
-        S3Bucket: "dalvacationhome-backend"
+        S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "LambdaConfirmUser.zip"
 
   LambdaLogin1stFactor:
@@ -41,7 +41,7 @@ Resources:
     Properties:
       FunctionName: "LambdaLogin1stFactor"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::160536684166:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -50,7 +50,7 @@ Resources:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
           DalVacationHomeAppClientId: !Ref UserPoolClient
       Code:
-        S3Bucket: "dalvacationhome-backend"
+        S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "LambdaLogin1stFactor.zip"
 
   LambdaLogin2ndFactor:
@@ -58,7 +58,7 @@ Resources:
     Properties:
       FunctionName: "LambdaLogin2ndFactor"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::160536684166:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -66,14 +66,14 @@ Resources:
         Variables:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
       Code:
-        S3Bucket: "dalvacationhome-backend"
+        S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "LambdaLogin2ndFactor.zip"
   LambdaLogin3rdFactor:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: "LambdaLogin3rdFactor"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::160536684166:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -81,7 +81,7 @@ Resources:
         Variables:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
       Code:
-        S3Bucket: "dalvacationhome-backend"
+        S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "LambdaLogin3rdFactor.zip"
 
   UserDalVacationDynamoTable:
@@ -172,12 +172,14 @@ Resources:
       RestApiId: !Ref UserAuthenticationApiGateway
       ParentId: !GetAtt UserAuthenticationApiLoginResource.ResourceId
       PathPart: "2nd"
+
   UserAuthenticationApiLogin3rdResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       RestApiId: !Ref UserAuthenticationApiGateway
       ParentId: !GetAtt UserAuthenticationApiLoginResource.ResourceId
       PathPart: "3rd"
+      
   SignUpMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -189,6 +191,8 @@ Resources:
         - StatusCode: 200
           ResponseModels:
             application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -196,13 +200,15 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaRegister.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::160536684166:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
           - StatusCode: "200"
             ResponseTemplates:
               application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
 
   ConfirmationMethod:
     Type: AWS::ApiGateway::Method
@@ -215,6 +221,8 @@ Resources:
         - StatusCode: 200
           ResponseModels:
             application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -222,13 +230,15 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaConfirmUser.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::160536684166:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
           - StatusCode: "200"
             ResponseTemplates:
               application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
 
   FirstLoginMethod:
     Type: AWS::ApiGateway::Method
@@ -241,6 +251,8 @@ Resources:
         - StatusCode: 200
           ResponseModels:
             application/json: "Empty"
+          ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -248,13 +260,16 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaLogin1stFactor.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::160536684166:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
           - StatusCode: "200"
             ResponseTemplates:
               application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+
   SecondLoginMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -266,6 +281,8 @@ Resources:
         - StatusCode: 200
           ResponseModels:
             application/json: "Empty"
+          ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -273,13 +290,16 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaLogin2ndFactor.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::160536684166:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
           - StatusCode: "200"
             ResponseTemplates:
               application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+
   ThirdLoginMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -291,6 +311,8 @@ Resources:
         - StatusCode: 200
           ResponseModels:
             application/json: "Empty"
+          ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -298,13 +320,16 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaLogin3rdFactor.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::160536684166:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
           - StatusCode: "200"
             ResponseTemplates:
               application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+
   UserAuthenticationApiStage:
     Type: AWS::ApiGateway::Stage
     Properties:
