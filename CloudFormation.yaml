@@ -16,7 +16,7 @@ Resources:
           DalVacationHomeUserPoolId: !Ref UserPool
           DalVacationHomeAppClientId: !Ref UserPoolClient
       Code:
-        S3Bucket: "dalvacationhome-backend"
+        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
         S3Key: "LambdaRegister.zip"
 
   LambdaConfirmUser:
@@ -33,7 +33,7 @@ Resources:
           DalVacationHomeUserPoolId: !Ref UserPool
           DalVacationHomeAppClientId: !Ref UserPoolClient
       Code:
-        S3Bucket: "dalvacationhome-backend"
+        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
         S3Key: "LambdaConfirmUser.zip"
 
   LambdaLogin1stFactor:
@@ -50,7 +50,7 @@ Resources:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
           DalVacationHomeAppClientId: !Ref UserPoolClient
       Code:
-        S3Bucket: "dalvacationhome-backend"
+        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
         S3Key: "LambdaLogin1stFactor.zip"
 
   LambdaLogin2ndFactor:
@@ -66,7 +66,7 @@ Resources:
         Variables:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
       Code:
-        S3Bucket: "dalvacationhome-backend"
+        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
         S3Key: "LambdaLogin2ndFactor.zip"
   LambdaLogin3rdFactor:
     Type: AWS::Lambda::Function
@@ -81,7 +81,7 @@ Resources:
         Variables:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
       Code:
-        S3Bucket: "dalvacationhome-backend"
+        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
         S3Key: "LambdaLogin3rdFactor.zip"
 
   UserDalVacationDynamoTable:
