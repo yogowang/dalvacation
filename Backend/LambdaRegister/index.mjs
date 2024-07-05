@@ -8,7 +8,7 @@ const dynamo = DynamoDBDocumentClient.from(ddbClient);
 const cognitoClient = new CognitoIdentityProviderClient({ region: 'us-east-1' });
 
 export const handler = async (event) => {
-  const { user_type, fullname, email, password, userName, phone_no, age, address, question, answer, key } = event;
+  const { user_type, fullname, email, password, userName, phone_no, gender, age, address, question, answer, key } = event;
   let responseBody = "";
   let statusCode = 0;
   const tableName = process.env.UserDalVacationDynamoTableName;
@@ -55,6 +55,7 @@ export const handler = async (event) => {
         password: encryptedPassword,
         userName: userName,
         phone_no: phone_no,
+        gender: gender,
         age: age,
         address: address,
         question: question,
