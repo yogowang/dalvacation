@@ -33,6 +33,7 @@ const Login = () => {
             if (response.data.statusCode === 200) {
                 localStorage.setItem("email", email);
                 localStorage.setItem("question", response.data.body.userQAQuestion);
+                localStorage.setItem("accessToken", response.data.body.authResponse.AuthenticationResult.AccessToken);
                 navigate("/login-2-factor") //navigate to 2nd factor
             } else {
                 toast.error(response.data.body);

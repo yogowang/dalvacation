@@ -9,13 +9,20 @@ import {
 
 const Navbar = () => {
   // const [dropDownMenu, setDropDownMenu] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const accessToken = localStorage.getItem("accessToken");
   let Links = [
     {
       name: "ROOMS",
-      link: "/event-list",
+      link: "/",
     }
   ];
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("email");
+    localStorage.removeItem("question");
+    navigate("/login");
+  };
 
   let [open, setOpen] = useState(false);
 
@@ -23,7 +30,6 @@ const Navbar = () => {
     <>
       <div className="fixed left-0 top-0 z-10 w-full">
         <div className="items-center justify-between bg-[#171719] px-7 py-4 md:flex md:px-10 text-[#3498DB]">
-          {/* logo section */}
           <Link
             to={"/"}
             className="flex cursor-pointer items-center gap-1 text-2xl font-bold"
@@ -55,6 +61,24 @@ const Navbar = () => {
                 </a>
               </li>
             ))}
+
+            {accessToken ? (
+              <>
+                <li>
+                  <button onClick={handleLogout} className="btn rounded bg-blue-500 px-3 py-1 font-semibold text-white duration-500 hover:bg-blue-700 md:static md:ml-8">
+                    Logout
+                  </button>
+                </li>
+              </>) : (
+              <>
+                <Link
+                  to="/login"
+                  className="btn rounded bg-blue-500 px-3 py-1 font-semibold text-white duration-500 hover:bg-blue-700 md:static md:ml-8"
+                >
+                  Login
+                </Link>
+              </>)}
+
           </ul>
         </div>
       </div>

@@ -28,7 +28,7 @@ const SignupConfirmation = () => {
             console.log(response);
 
             if (response.data.statusCode === 200) {
-                navigate("/")
+                navigate("/login")
             } else {
                 toast.error("Invalid confirmation code");
             }
