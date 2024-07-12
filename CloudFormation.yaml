@@ -83,7 +83,21 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaLogin3rdFactor.zip"
-
+  LambdaAddFeedback:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaAddFeedback"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
+        S3Key: "AddFeedback.zip"
   UserDalVacationDynamoTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -105,7 +119,7 @@ Resources:
         - AttributeName: "feedback_id"
           AttributeType: "S"
         - AttributeName: "timestamp"
-          AttributeType: "S"
+          AttributeType: "N"
       KeySchema:
         - AttributeName: "feedback_id"
           KeyType: "HASH"

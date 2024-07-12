@@ -1,39 +1,37 @@
+//https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/dynamodb-example-dynamodb-utilities.html
+//https://codedamn.com/news/javascript/how-to-convert-timestamp-to-date-in-javascript
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
-
+import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
+import crypto from 'crypto';
 const ddbClient = new DynamoDBClient({});
 const dynamo = DynamoDBDocumentClient.from(ddbClient);
 
 export const handler = async (event) => {
-  const { email, answer } = event;
+  const { email, text } = event;
+  const feedback_id=crypto.randomUUID();
+  const timestamp=Date.now();
+  const date= new Date(timestamp).toDateString();
   let responseBody = "";
   let statusCode = 0;
   const tableName = process.env.FeedbackDalVacationDynamoTableName;
 
   try {
-    const user = await dynamo.send(
-      new GetCommand({
+      await dynamo.send(
+      new PutCommand({
         TableName: tableName,
-        Key: {
-          email: email
+        Item: {
+          feedback_id:feedback_id,
+          timestamp:timestamp,
+          email: email,
+          text: text,
+          date:date
         },
       })
     );
-
-    if (user.Item) {
-      if (user.Item.answer === answer) {
-        responseBody = "Second factor authentication successful";
-        statusCode = 200;
-      } else {
-        responseBody = "Incorrect answer";
-        statusCode = 403;
-      }
-    } else {
-      responseBody = "User not found";
-      statusCode = 404;
-    }
+    responseBody='feedback submitted';
+    statusCode=200;
   } catch (error) {
-    responseBody = `Second factor authentication failed: ${error.message}`;
+    responseBody = `submission failed: ${error.message}`;
     statusCode = 500;
   }
 
