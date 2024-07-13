@@ -13,6 +13,7 @@ import { RoomDetailsIndex } from './pages/room-details';
 import { AddRoomDetails } from './pages/room-details/AddRoomDetails/AddRoomDetails';
 import { UpdateRoomDetails } from './pages/room-details/UpdateRoomDetails/UpdateRoomDetails';
 import Home from './pages/home/Home';
+import ChatBot from './components/chatbot/ChatBot';
 
 function App() {
   return (
@@ -31,25 +32,9 @@ function App() {
           <Route path="/room-details" element={<RoomDetailsIndex />} />
           <Route path="/add-room-details" element={<AddRoomDetails />} />
           <Route path="/update-room-details/:room_id" element={<UpdateRoomDetails />} />
-          {/*<Route path="/event-list" element={<EventList />} />
-          <Route path="/my-events" element={<EventList />} />
-          <Route path="/event-details/:id" element={<EventDetails />} />
-          <Route path="/add-event" element={<AddEvent />} />
-          <Route path="/edit-event/:id" element={<AddEvent />} />
-          <Route path="/history" element={<BookingHistory />} />
-          <Route path="/customer-profile/:id" element={<CustomerProfile />} />
-          <Route
-            path="/event-organizer-profile/:id"
-            element={<EventOrganizerProfile />}
-          />
-          <Route path="/payment-success/:id" element={<PaymentSuccess />} />
-          <Route path="/payment-failure/:id" element={<PaymentFailure />} />
-          <Route
-            path="/event-organizer-analytics/:id"
-            element={<EventOrganizerAnalytics />}
-          /> */}
         </Routes>
         <Footer />
+        <ChatBot />
       </Router>
     </>
 
