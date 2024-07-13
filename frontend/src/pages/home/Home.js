@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import background from "../../assets/images/background.jpg";
 import { useNavigate } from "react-router-dom";
-import HomePageRoom from "../../components/card/HomePageRoom";
+import HomePageRoom from "../../components/card/RoomCard";
 
 const Home = () => {
   const navigate = useNavigate();
