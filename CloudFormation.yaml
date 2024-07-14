@@ -13,8 +13,8 @@ Resources:
       Environment:
         Variables:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
-          DalVacationHomeUserPoolId: !Ref UserPool
-          DalVacationHomeAppClientId: !Ref UserPoolClient
+          DalVacationHomeUserPoolId: !Ref DalVacationHomeUserPool
+          DalVacationHomeAppClientId: !Ref DalVacationHomeUserPoolClient
       Code:
         S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "LambdaRegister.zip"
@@ -30,8 +30,10 @@ Resources:
       MemorySize: 512
       Environment:
         Variables:
-          DalVacationHomeUserPoolId: !Ref UserPool
-          DalVacationHomeAppClientId: !Ref UserPoolClient
+          DalVacationHomeUserPoolId: !Ref DalVacationHomeUserPool
+          DalVacationHomeAppClientId: !Ref DalVacationHomeUserPoolClient
+          UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
+          DalVacationHomeSnsTopicArn: !Ref DalVacationHomeSnsTopic
       Code:
         S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "LambdaConfirmUser.zip"
@@ -48,7 +50,7 @@ Resources:
       Environment:
         Variables:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
-          DalVacationHomeAppClientId: !Ref UserPoolClient
+          DalVacationHomeAppClientId: !Ref DalVacationHomeUserPoolClient
       Code:
         S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "LambdaLogin1stFactor.zip"
@@ -68,6 +70,7 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "LambdaLogin2ndFactor.zip"
+
   LambdaLogin3rdFactor:
     Type: AWS::Lambda::Function
     Properties:
@@ -80,9 +83,31 @@ Resources:
       Environment:
         Variables:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
+          LambdaSNSNotificationName: !Ref LambdaSNSNotification
       Code:
         S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "LambdaLogin3rdFactor.zip"
+
+  LambdaSNSNotification:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaSNSNotification"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::160536684166:role/LabRole"  # Replace with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          DalVacationHomeSnsTopicArn: !Ref DalVacationHomeSnsTopic
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket"
+        S3Key: "LambdaSNSNotification.zip"
+
+  DalVacationHomeSnsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: DalVacationHomeSnsTopic
 
   UserDalVacationDynamoTable:
     Type: AWS::DynamoDB::Table
@@ -98,10 +123,10 @@ Resources:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
 
-  UserPool:
+  DalVacationHomeUserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: DALVacationHomeUserPool
+      UserPoolName: DalVacationHomeUserPool
       UsernameAttributes:
         - email
       AutoVerifiedAttributes:
@@ -112,11 +137,11 @@ Resources:
           RequireNumbers: true
       MfaConfiguration: "OFF"
 
-  UserPoolClient:
+  DalVacationHomeUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      UserPoolId: !Ref UserPool
-      ClientName: DALVacationHomeAppClient
+      UserPoolId: !Ref DalVacationHomeUserPool
+      ClientName: DalVacationHomeUserPoolClient
       GenerateSecret: false
       ExplicitAuthFlows:
         - ALLOW_USER_PASSWORD_AUTH
@@ -125,7 +150,6 @@ Resources:
         - COGNITO
 
   # API GATEWAY
-
   UserAuthenticationApiGateway:
     Type: AWS::ApiGateway::RestApi
     Properties:
