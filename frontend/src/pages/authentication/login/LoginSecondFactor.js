@@ -13,7 +13,7 @@ const LoginSecondFactor = () => {
 
     const callSecondFactorAuth = async () => {
         if (answer) {
-            const api_login_2_factor_url = `https://qz7jhm2dvd.execute-api.us-east-1.amazonaws.com/login-factor-two/authentication/login/2nd`
+            const api_login_2_factor_url = `https://q2di1m9y28.execute-api.us-east-1.amazonaws.com/api/authentication/login/2nd`
             const userData = {
                 email: email,
                 question: question,

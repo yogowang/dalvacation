@@ -21,10 +21,15 @@ const style = {
 export const DeleteRoomDetails = ({ open, handleClose, room_id, room_number }) => {
     const navigate = useNavigate();
 
-    const onSubmit = async () => {
-        const deleteRoomDetailsAPIURL = `https://raqg72q35fqlsbg7s6xigd2ci40niioo.lambda-url.us-east-1.on.aws?room_id=${room_id}`;
+    const data = {
+        room_id: room_id
+    }
 
-        const response = await axios.delete(deleteRoomDetailsAPIURL);
+    const onSubmit = async () => {
+        const deleteRoomDetailsAPIURL = `https://q2di1m9y28.execute-api.us-east-1.amazonaws.com/api/booking/deleteroomdetails`;
+
+        const response = await axios.post(deleteRoomDetailsAPIURL, data);
+        console.log("delete response: ", response);
 
         handleClose();
         navigate(0);

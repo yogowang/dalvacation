@@ -13,7 +13,7 @@ const LoginThirdFactor = () => {
 
     const callThirdFactorAuth = async () => {
         if (decryptedWord) {
-            const api_login_3_factor_url = `https://qz7jhm2dvd.execute-api.us-east-1.amazonaws.com/login-factor-three/authentication/login/3rd`
+            const api_login_3_factor_url = `https://q2di1m9y28.execute-api.us-east-1.amazonaws.com/api/authentication/login/3rd`
             const userData = {
                 email: email,
                 word: randomWord,

@@ -43,7 +43,7 @@ const Signup = () => {
 
             console.log(userData);
 
-            const api_signup_url = `https://qz7jhm2dvd.execute-api.us-east-1.amazonaws.com/signup/authentication/signup`; //`${process.env.REACT_APP_BACKEND_URL}api/users/signup`;
+            const api_signup_url = `https://q2di1m9y28.execute-api.us-east-1.amazonaws.com/api/authentication/signup`; //`${process.env.REACT_APP_BACKEND_URL}api/users/signup`;
 
             console.log("backend url: ", api_signup_url);
 
