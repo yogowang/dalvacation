@@ -95,6 +95,8 @@ Resources:
       Environment:
         Variables:
           FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable
+          GOOGLE_API_ACCESS_TOKEN: "ya29.a0AXooCgsH7BffSH5-xxEa0_opSyaoRJLRdGZzVf7RAnGYLEiwAGPZA4HPBYjyjFAZo57NbktIju6lLtzZDbYP4D6gzEBcACECSKJXwItDpPRm0YpcTgY8IuwGnbBaU60e_7HJiM1y4JTNBHaJDXEEzpZWnnpJgxGNCB6ULZg0Ymbt9P2q0oBcCg5gntJZWf_UvQfufhKraiyYPC2x7rtAR8P_epkhI5qnV2qJeMzqXdg45TsI2S6fRlz6HdUNzia4bYrKVM_UYzkZGyeOJiWknXALC4v-cF2NsvRmHO_MB3pGACX6Lnc7lmMmDxeUKMcS-Vuxqyb4GjbPPPa9PdjEiOj_fT-lj3TaNuGMjeB9kH7x-0tn9WuD_zEdYPN7f2sZEx9dpurDoayohwNcSBrkqhd8QgbffCMaCgYKAbASARMSFQHGX2MieqUWPN4E67_Dbk2ApuUybg0422"
+          API_ENDPOINT: "https://us-central1-aiplatform.googleapis.com/v1/projects/csci-5410-serverless-428001/locations/us-central1/publishers/google/models/gemini-1.5-flash-001:streamGenerateContent"
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "AddFeedback.zip"
