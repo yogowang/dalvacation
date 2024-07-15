@@ -94,8 +94,8 @@ Resources:
       MemorySize: 512
       Environment:
         Variables:
-          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable
-          GOOGLE_API_ACCESS_TOKEN: "ya29.a0AXooCgsH7BffSH5-xxEa0_opSyaoRJLRdGZzVf7RAnGYLEiwAGPZA4HPBYjyjFAZo57NbktIju6lLtzZDbYP4D6gzEBcACECSKJXwItDpPRm0YpcTgY8IuwGnbBaU60e_7HJiM1y4JTNBHaJDXEEzpZWnnpJgxGNCB6ULZg0Ymbt9P2q0oBcCg5gntJZWf_UvQfufhKraiyYPC2x7rtAR8P_epkhI5qnV2qJeMzqXdg45TsI2S6fRlz6HdUNzia4bYrKVM_UYzkZGyeOJiWknXALC4v-cF2NsvRmHO_MB3pGACX6Lnc7lmMmDxeUKMcS-Vuxqyb4GjbPPPa9PdjEiOj_fT-lj3TaNuGMjeB9kH7x-0tn9WuD_zEdYPN7f2sZEx9dpurDoayohwNcSBrkqhd8QgbffCMaCgYKAbASARMSFQHGX2MieqUWPN4E67_Dbk2ApuUybg0422"
+          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable #replace token and api with your own
+          GOOGLE_API_ACCESS_TOKEN: "ya29.a0AXooCguJCRWZtsHa8bKdAJkKP1DU1YIw7NpJpgEZckzgPnK0dbgySdX3ScewqT4a5_4LYucpolS2X16B28AT0HvAtHaIJI-HxUY6k1oQV7_klx1PUNEhs0EO47FyMmRGUJuOKks-_YbPkujb21TZTtbyrUJ-ukEftL0MB6JoblfSsoyGCIhpCMDxAXnoO5Mxf5oEZvJycPsi99frCD8iTPcv7Um48OfJLpiUo4Ezy8eCXOmwMVDml9LIxZ3T5ZSfG9rO4uOmanBSHt2SUxKZz6jpq06nK8ZpMAnsmqjqbEMCryg4tcXdpZHPuz_ujnWEa8Ct41ah-xUBdKpb5upUV3yTFtZfmfb1sl4iKgANkmpF5vitZgOJDodMdlEJGIIJ3J94W_vX0_cxcMU-VVH9UFk1mueKPowaCgYKAV8SARMSFQHGX2MicHvJhlrqVMgubkRB8rVmyg0422"
           API_ENDPOINT: "https://us-central1-aiplatform.googleapis.com/v1/projects/csci-5410-serverless-428001/locations/us-central1/publishers/google/models/gemini-1.5-flash-001:streamGenerateContent"
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
@@ -158,6 +158,23 @@ Resources:
         - COGNITO
 
   # API GATEWAY
+  FeedbackApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: FeedbackApiGateway
+
+  FeedbackApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref FeedbackApiGateway
+      ParentId: !GetAtt FeedbackApiGateway.RootResourceId
+      PathPart: "feedback"
+  AddFeedbackApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref FeedbackApiGateway
+      ParentId: !GetAtt FeedbackApiResource.ResourceId
+      PathPart: "addFeedback"
 
   UserAuthenticationApiGateway:
     Type: AWS::ApiGateway::RestApi
@@ -362,6 +379,35 @@ Resources:
               application/json: ""
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+  AddFeedbackMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref FeedbackApiGateway
+      ResourceId: !Ref AddFeedbackApiResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaAddFeedback.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
 
   UserAuthenticationApiStage:
     Type: AWS::ApiGateway::Stage
@@ -380,3 +426,16 @@ Resources:
       - ThirdLoginMethod
     Properties:
       RestApiId: !Ref UserAuthenticationApiGateway
+  FeedbackApiStage:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId: !Ref FeedbackApiGateway
+      DeploymentId: !Ref FeedbackApiDeployment
+      StageName: v2
+
+  FeedbackApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - AddFeedbackMethod
+    Properties:
+      RestApiId: !Ref FeedbackApiGateway 
