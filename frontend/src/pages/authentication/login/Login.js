@@ -15,7 +15,7 @@ const Login = () => {
 
     const callLogin = async () => {
         if (validate()) {
-            const api_login_url = `https://qz7jhm2dvd.execute-api.us-east-1.amazonaws.com/login-factore-one/authentication/login/1st`
+            const api_login_url = `https://q2di1m9y28.execute-api.us-east-1.amazonaws.com/api/authentication/login/1st`
             const userData = {
                 email: email,
                 password: password,
@@ -33,6 +33,8 @@ const Login = () => {
             if (response.data.statusCode === 200) {
                 localStorage.setItem("email", email);
                 localStorage.setItem("question", response.data.body.userQAQuestion);
+                localStorage.setItem("accessToken", response.data.body.authResponse.AuthenticationResult.AccessToken);
+                localStorage.setItem("userType", userType);
                 navigate("/login-2-factor") //navigate to 2nd factor
             } else {
                 toast.error(response.data.body);

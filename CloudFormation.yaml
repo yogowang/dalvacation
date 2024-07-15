@@ -1,6 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Iac for Dal Vacation Home
 Resources:
+  # Lambda - Authentication
   LambdaRegister:
     Type: AWS::Lambda::Function
     Properties:
@@ -68,6 +69,7 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaLogin2ndFactor.zip"
+
   LambdaLogin3rdFactor:
     Type: AWS::Lambda::Function
     Properties:
@@ -100,6 +102,88 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "AddFeedback.zip"
+  # Lambda - Booking
+  LambdaGetAllRoomDetails:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaGetAllRoomDetails"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
+        S3Key: "LambdaGetAllRoomDetails.zip"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref RoomsTable
+
+  LambdaGetRoomDetailsByRoomId:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaGetRoomDetailsByRoomId"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
+        S3Key: "LambdaGetRoomDetailsByRoomId.zip"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref RoomsTable
+
+  LambdaAddRoomDetails:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaAddRoomDetails"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
+        S3Key: "LambdaAddRoomDetails.zip"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref RoomsTable
+
+  LambdaUpdateRoomDetails:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaUpdateRoomDetails"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
+        S3Key: "LambdaUpdateRoomDetails.zip"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref RoomsTable
+
+  LambdaDeleteRoomDetails:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaDeleteRoomDetails"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
+        S3Key: "LambdaDeleteRoomDetails.zip"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref RoomsTable
+
+  #Dynamo DB
   UserDalVacationDynamoTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -131,6 +215,21 @@ Resources:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
 
+  RoomsTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      TableName: "Rooms"
+      AttributeDefinitions:
+        - AttributeName: "room_id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "room_id"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  # Cognito
   UserPool:
     Type: AWS::Cognito::UserPool
     Properties:
@@ -157,83 +256,132 @@ Resources:
       SupportedIdentityProviders:
         - COGNITO
 
-  # API GATEWAY
-  FeedbackApiGateway:
+  # API GATEWAY - Resources
+  DalVacationHomeApiGateway:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: FeedbackApiGateway
+      Name: DalVacationHomeApiGateway
 
+
+  # General API Resource
+  DalVacationHomeApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: DalVacationHomeApiGateway
+  # Feedback API
   FeedbackApiResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      RestApiId: !Ref FeedbackApiGateway
-      ParentId: !GetAtt FeedbackApiGateway.RootResourceId
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
       PathPart: "feedback"
   AddFeedbackApiResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      RestApiId: !Ref FeedbackApiGateway
+      RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt FeedbackApiResource.ResourceId
       PathPart: "addFeedback"
-
-  UserAuthenticationApiGateway:
-    Type: AWS::ApiGateway::RestApi
-    Properties:
-      Name: UserAuthenticationApiGateway
-
+  # Authentication API Resource
   UserAuthenticationApiAuthenticationResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
-      ParentId: !GetAtt UserAuthenticationApiGateway.RootResourceId
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
       PathPart: "authentication"
 
+  # Signup API Resource
   UserAuthenticationApiSignupResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
+      RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt UserAuthenticationApiAuthenticationResource.ResourceId
       PathPart: "signup"
-
-  UserAuthenticationApiLoginResource:
-    Type: AWS::ApiGateway::Resource
-    Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
-      ParentId: !GetAtt UserAuthenticationApiAuthenticationResource.ResourceId
-      PathPart: "login"
 
   UserAuthenticationApiSignupConfirmationResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
+      RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt UserAuthenticationApiSignupResource.ResourceId
       PathPart: "confirmation"
+
+  # Login API Resource
+  UserAuthenticationApiLoginResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt UserAuthenticationApiAuthenticationResource.ResourceId
+      PathPart: "login"
 
   UserAuthenticationApiLogin1stResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
+      RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt UserAuthenticationApiLoginResource.ResourceId
       PathPart: "1st"
 
   UserAuthenticationApiLogin2ndResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
+      RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt UserAuthenticationApiLoginResource.ResourceId
       PathPart: "2nd"
 
   UserAuthenticationApiLogin3rdResource:
     Type: AWS::ApiGateway::Resource
     Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
+      RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt UserAuthenticationApiLoginResource.ResourceId
       PathPart: "3rd"
-      
+
+  #Booking API Resource
+  RoomBookingApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
+      PathPart: "booking"
+
+  RoomBookingApiGetAllRoomDetailsResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt RoomBookingApiResource.ResourceId
+      PathPart: "allroomdetails"
+
+  RoomBookingApiGetRoomDetailsByRoomIdResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt RoomBookingApiResource.ResourceId
+      PathPart: "roomdetails"
+
+  RoomBookingApiAddRoomDetailsResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt RoomBookingApiResource.ResourceId
+      PathPart: "addroomdetails"
+
+  RoomBookingApiUpdateRoomDetailsResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt RoomBookingApiResource.ResourceId
+      PathPart: "updateroomdetails"
+
+  RoomBookingApiDeleteRoomDetailsResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt RoomBookingApiResource.ResourceId
+      PathPart: "deleteroomdetails"
+
+  # API GATEWAY - Methods
+  # Authentication API Methods
   SignUpMethod:
     Type: AWS::ApiGateway::Method
     Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
+      RestApiId: !Ref DalVacationHomeApiGateway
       ResourceId: !Ref UserAuthenticationApiSignupResource
       HttpMethod: POST
       AuthorizationType: NONE
@@ -263,7 +411,7 @@ Resources:
   ConfirmationMethod:
     Type: AWS::ApiGateway::Method
     Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
+      RestApiId: !Ref DalVacationHomeApiGateway
       ResourceId: !Ref UserAuthenticationApiSignupConfirmationResource
       HttpMethod: POST
       AuthorizationType: NONE
@@ -293,7 +441,7 @@ Resources:
   FirstLoginMethod:
     Type: AWS::ApiGateway::Method
     Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
+      RestApiId: !Ref DalVacationHomeApiGateway
       ResourceId: !Ref UserAuthenticationApiLogin1stResource
       HttpMethod: POST
       AuthorizationType: NONE
@@ -302,7 +450,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -323,7 +471,7 @@ Resources:
   SecondLoginMethod:
     Type: AWS::ApiGateway::Method
     Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
+      RestApiId: !Ref DalVacationHomeApiGateway
       ResourceId: !Ref UserAuthenticationApiLogin2ndResource
       HttpMethod: POST
       AuthorizationType: NONE
@@ -332,7 +480,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -353,7 +501,7 @@ Resources:
   ThirdLoginMethod:
     Type: AWS::ApiGateway::Method
     Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
+      RestApiId: !Ref DalVacationHomeApiGateway
       ResourceId: !Ref UserAuthenticationApiLogin3rdResource
       HttpMethod: POST
       AuthorizationType: NONE
@@ -362,7 +510,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -382,7 +530,7 @@ Resources:
   AddFeedbackMethod:
     Type: AWS::ApiGateway::Method
     Properties:
-      RestApiId: !Ref FeedbackApiGateway
+      RestApiId: !Ref DalVacationHomeApiGateway
       ResourceId: !Ref AddFeedbackApiResource
       HttpMethod: POST
       AuthorizationType: NONE
@@ -408,15 +556,164 @@ Resources:
               application/json: ""
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+  GetAllRoomDetailsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref RoomBookingApiGetAllRoomDetailsResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetAllRoomDetails.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
 
-  UserAuthenticationApiStage:
+  GetRoomDetailsByIdMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref RoomBookingApiGetRoomDetailsByRoomIdResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetRoomDetailsByRoomId.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+
+  AddRoomDetailsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref RoomBookingApiAddRoomDetailsResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaAddRoomDetails.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+
+  UpdateRoomDetailsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref RoomBookingApiUpdateRoomDetailsResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaUpdateRoomDetails.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+
+  DeleteRoomDetailsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref RoomBookingApiDeleteRoomDetailsResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaDeleteRoomDetails.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+
+  DalVacationHomeApiStage:
     Type: AWS::ApiGateway::Stage
     Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
-      DeploymentId: !Ref UserAuthenticationApiDeployment
-      StageName: v1
+      RestApiId: !Ref DalVacationHomeApiGateway
+      DeploymentId: !Ref DalVacationHomeApiDeployment
+      StageName: api
 
-  UserAuthenticationApiDeployment:
+  DalVacationHomeApiDeployment:
     Type: AWS::ApiGateway::Deployment
     DependsOn:
       - SignUpMethod
@@ -424,18 +721,12 @@ Resources:
       - FirstLoginMethod
       - SecondLoginMethod
       - ThirdLoginMethod
-    Properties:
-      RestApiId: !Ref UserAuthenticationApiGateway
-  FeedbackApiStage:
-    Type: AWS::ApiGateway::Stage
-    Properties:
-      RestApiId: !Ref FeedbackApiGateway
-      DeploymentId: !Ref FeedbackApiDeployment
-      StageName: v2
-
-  FeedbackApiDeployment:
-    Type: AWS::ApiGateway::Deployment
-    DependsOn:
+      - GetAllRoomDetailsMethod
+      - GetRoomDetailsByIdMethod
+      - AddRoomDetailsMethod
+      - UpdateRoomDetailsMethod
+      - DeleteRoomDetailsMethod
       - AddFeedbackMethod
     Properties:
-      RestApiId: !Ref FeedbackApiGateway 
+      RestApiId: !Ref DalVacationHomeApiGateway
+  
