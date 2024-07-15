@@ -72,6 +72,4 @@ function generateRandomWord() {
     return word;
 }
 
-console.log(generateRandomWord());
-
 export default LoginThirdFactor;

@@ -14,7 +14,7 @@ const Navbar = () => {
   let Links = [
     {
       name: "ROOMS",
-      link: "/",
+      link: "/room-details",
     }
   ];
   const handleLogout = () => {

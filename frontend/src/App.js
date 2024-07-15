@@ -14,6 +14,7 @@ import { AddRoomDetails } from './pages/room-details/AddRoomDetails/AddRoomDetai
 import { UpdateRoomDetails } from './pages/room-details/UpdateRoomDetails/UpdateRoomDetails';
 import Home from './pages/home/Home';
 import ChatBot from './components/chatbot/ChatBot';
+import RoomDetailsPage from './pages/room-details/RoomDetailsPage/RoomDetailsPage';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/room-details" element={<RoomList />} />
           <Route path="/add-room-details" element={<AddRoomDetails />} />
           <Route path="/update-room-details/:room_id" element={<UpdateRoomDetails />} />
+          <Route path="/room-details/:id" element={<RoomDetailsPage />} />
         </Routes>
         <Footer />
         <ChatBot />
