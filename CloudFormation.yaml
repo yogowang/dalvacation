@@ -85,6 +85,7 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaLogin3rdFactor.zip"
+  # Lambda Feedback
   LambdaAddFeedback:
     Type: AWS::Lambda::Function
     Properties:
@@ -97,11 +98,56 @@ Resources:
       Environment:
         Variables:
           FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable #replace token and api with your own
-          GOOGLE_API_ACCESS_TOKEN: "ya29.a0AXooCguJCRWZtsHa8bKdAJkKP1DU1YIw7NpJpgEZckzgPnK0dbgySdX3ScewqT4a5_4LYucpolS2X16B28AT0HvAtHaIJI-HxUY6k1oQV7_klx1PUNEhs0EO47FyMmRGUJuOKks-_YbPkujb21TZTtbyrUJ-ukEftL0MB6JoblfSsoyGCIhpCMDxAXnoO5Mxf5oEZvJycPsi99frCD8iTPcv7Um48OfJLpiUo4Ezy8eCXOmwMVDml9LIxZ3T5ZSfG9rO4uOmanBSHt2SUxKZz6jpq06nK8ZpMAnsmqjqbEMCryg4tcXdpZHPuz_ujnWEa8Ct41ah-xUBdKpb5upUV3yTFtZfmfb1sl4iKgANkmpF5vitZgOJDodMdlEJGIIJ3J94W_vX0_cxcMU-VVH9UFk1mueKPowaCgYKAV8SARMSFQHGX2MicHvJhlrqVMgubkRB8rVmyg0422"
+          GOOGLE_API_ACCESS_TOKEN: "ya29.a0AXooCgu-MPXuklwR_eFw709pYqyHfSYNxkk7wxbBUGxqj_HuyX_eQLW7vH6f6soaGmrCR6sS0T3hqcVqmTCYoIt_K0Rq3-K7OGlnF534vub2PZ0ND83oZWdxYuW3wEupCspgAdzixBhlKi-lMYJK8pMAdaTsCY8KTgzkv8yfvey05IYiuXO_YQhkooEzZdixcRRUKa_cyEXvc18IrVBjyaDtkIbssDJKPSB8iM-j8v1bc8uyal1Dl_HObKRWWhZnGRDtRXAAf8EL8ENuUxBSwk6rLrZ1bsRPOoTgy49FzhkIm8nDE1jhQ0oovK8uz4jzHveswvL4ac5RhTrWyHZyC4ZmyBmpW9un-4JKa_AGWU-YSn6goJtrN3E4MoHttnM_EpNLfS7KlBaBidaGbYW4R5Q6Yu9zp7EzaCgYKAUcSARMSFQHGX2MiAtvehHZfXrSMXXIMdlp2RQ0423"
           API_ENDPOINT: "https://us-central1-aiplatform.googleapis.com/v1/projects/csci-5410-serverless-428001/locations/us-central1/publishers/google/models/gemini-1.5-flash-001:streamGenerateContent"
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "AddFeedback.zip"
+  LambdaReturnAllFeedback:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaReturnAllFeedback"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable 
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
+        S3Key: "ReturnAllFeedback.zip"
+  LambdaGetFeedbackByRoomId:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaGetFeedbackByRoomId"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable 
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
+        S3Key: "GetFeedbackByRoomId.zip"
+  LambdaDeleteFeedbackById:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaDeleteFeedbackById"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable 
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
+        S3Key: "DeleteFeedbackById.zip"
   # Lambda - Booking
   LambdaGetAllRoomDetails:
     Type: AWS::Lambda::Function
@@ -204,13 +250,9 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "feedback_id"
           AttributeType: "S"
-        - AttributeName: "timestamp"
-          AttributeType: "N"
       KeySchema:
         - AttributeName: "feedback_id"
           KeyType: "HASH"
-        - AttributeName: "timestamp"
-          KeyType: "RANGE"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
@@ -281,6 +323,24 @@ Resources:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt FeedbackApiResource.ResourceId
       PathPart: "addFeedback"
+  ReturnAllFeedbackApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt FeedbackApiResource.ResourceId
+      PathPart: "returnAllFeedback"
+  GetFeedbackByRoomIdApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt FeedbackApiResource.ResourceId
+      PathPart: "getFeedbackByRoomId"
+  DeleteFeedbackByIdApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt FeedbackApiResource.ResourceId
+      PathPart: "DeleteFeedbackById"
   # Authentication API Resource
   UserAuthenticationApiAuthenticationResource:
     Type: AWS::ApiGateway::Resource
@@ -556,6 +616,93 @@ Resources:
               application/json: ""
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+  ReturnAllFeedbackMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref ReturnAllFeedbackApiResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaReturnAllFeedback.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+  GetFeedbackByRoomIdMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref GetFeedbackByRoomIdApiResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetFeedbackByRoomId.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+  DeleteFeedbackByIdMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref DeleteFeedbackByIdApiResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaDeleteFeedbackById.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
   GetAllRoomDetailsMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -727,6 +874,9 @@ Resources:
       - UpdateRoomDetailsMethod
       - DeleteRoomDetailsMethod
       - AddFeedbackMethod
+      - ReturnAllFeedbackMethod
+      - GetFeedbackByRoomIdMethod
+      - DeleteFeedbackByIdMethod
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
   
