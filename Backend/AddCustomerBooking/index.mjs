@@ -7,7 +7,7 @@ const dynamodb = DynamoDBDocumentClient.from(client);
 const BOOKINGS_TABLE = 'CustomerBookings';
 
 export const handler = async (event) => {
-  const { customer_id, room_id, start_date, end_date, start_time, end_time } = JSON.parse(event.body);
+  const { customer_id, room_id, start_date, end_date, total_days, total_amount } = JSON.parse(event.body);
   
   const booking_reference_code = generateBookingReferenceCode();
   
@@ -20,8 +20,8 @@ export const handler = async (event) => {
         room_id,
         start_date,
         end_date,
-        start_time,
-        end_time
+        total_days,
+        total_amount
       }
     };
 
