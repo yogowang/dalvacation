@@ -97,7 +97,7 @@ Resources:
       Environment:
         Variables:
           FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable #replace token and api with your own
-          GOOGLE_API_ACCESS_TOKEN: "ya29.a0AXooCguJCRWZtsHa8bKdAJkKP1DU1YIw7NpJpgEZckzgPnK0dbgySdX3ScewqT4a5_4LYucpolS2X16B28AT0HvAtHaIJI-HxUY6k1oQV7_klx1PUNEhs0EO47FyMmRGUJuOKks-_YbPkujb21TZTtbyrUJ-ukEftL0MB6JoblfSsoyGCIhpCMDxAXnoO5Mxf5oEZvJycPsi99frCD8iTPcv7Um48OfJLpiUo4Ezy8eCXOmwMVDml9LIxZ3T5ZSfG9rO4uOmanBSHt2SUxKZz6jpq06nK8ZpMAnsmqjqbEMCryg4tcXdpZHPuz_ujnWEa8Ct41ah-xUBdKpb5upUV3yTFtZfmfb1sl4iKgANkmpF5vitZgOJDodMdlEJGIIJ3J94W_vX0_cxcMU-VVH9UFk1mueKPowaCgYKAV8SARMSFQHGX2MicHvJhlrqVMgubkRB8rVmyg0422"
+          GOOGLE_API_ACCESS_TOKEN: "ya29.a0AXooCgtQq0Lc3Kt9bVWFYTQNY55OKatUxV68K4KB8zuSEoOdEJq196pFWPE19ldZBinVG-8Wy5Z2jLhGQxJUT4AO2YtbhhBnmtlbkZt3fRbBqXZJKLosynKmHoU1g6uck3VPnJ1FoEtX0v5wG6I5ZRRfc9g7uaKvB3xkEeztrPO1rcPYbrmUrNAk6VnZonYqmCfjNOwL0E0E5CT3ooQJKvhQ01ipFEk4014eOavKpnR02pzsJSPK3UFod-YVgfcLOUuVmxsZQFkg0EyUuJy-o9RdgasRDe4EEit8rNRywJ3a15hUsvv6ejQMZdAfpd_K0DssN2AViNpEnDNIaA3VT4ZEdZOMCtb9GHThubeffgy2m70erJc0cdUECE8df13tZSlg071V8YZixbC1Sf6OiYKtAKv7XoPOaCgYKAbQSARMSFQHGX2MidkqM3fP5V37cEEairuGdHQ0423"
           API_ENDPOINT: "https://us-central1-aiplatform.googleapis.com/v1/projects/csci-5410-serverless-428001/locations/us-central1/publishers/google/models/gemini-1.5-flash-001:streamGenerateContent"
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket

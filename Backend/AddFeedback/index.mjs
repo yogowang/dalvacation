@@ -9,6 +9,8 @@ const ddbClient = new DynamoDBClient({});
 const dynamo = DynamoDBDocumentClient.from(ddbClient);
 const API_ENDPOINT = process.env.API_ENDPOINT;
 async function analyzeSentiment(text) {
+  const prompt="just print out the sentiment without anything else. Input:";
+  text=prompt+text;
   const requestData = {
     contents: [
       {
@@ -74,7 +76,7 @@ export const handler = async (event) => {
           email: email,
           text: text,
           date:date,
-          sentiment:sentiment
+          sentiment:sentiment[0]["candidates"][0]["content"]["parts"][0]["text"]
         },
       })
     );
