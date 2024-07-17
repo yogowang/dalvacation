@@ -57,7 +57,7 @@ async function analyzeSentiment(text) {
   return response.data;
 }
 export const handler = async (event) => {
-  const { email, text } = event;
+  const { email, text,room_id } = event;
   const feedback_id=crypto.randomUUID();
   const timestamp=Date.now();
   const date= new Date(timestamp).toDateString();
@@ -74,6 +74,7 @@ export const handler = async (event) => {
           feedback_id:feedback_id,
           timestamp:timestamp,
           email: email,
+          room_id:room_id,
           text: text,
           date:date,
           sentiment:sentiment[0]["candidates"][0]["content"]["parts"][0]["text"]
