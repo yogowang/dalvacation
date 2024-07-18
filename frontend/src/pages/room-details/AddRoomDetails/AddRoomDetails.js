@@ -27,7 +27,7 @@ export const AddRoomDetails = () => {
         }
 
         console.log("data:", data);
-        const addRoomDetailsAPIURL = "https://q2di1m9y28.execute-api.us-east-1.amazonaws.com/api/booking/addroomdetails";
+        const addRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}booking/addroomdetails`;
         const response = await axios.post(addRoomDetailsAPIURL, data);
         console.log(response);
 
