@@ -8,6 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { ToastContainer, toast } from "react-toastify";
 import dayjs from 'dayjs';
+import TextInput from "../../../components/input/TextInput";
 
 const RoomDetailsPage = () => {
     const { id } = useParams();
@@ -16,14 +17,17 @@ const RoomDetailsPage = () => {
     const [roomDetails, setRoomDetails] = useState();
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
-    const getRoomDetailsByRoomIdAPIURL = `https://q2di1m9y28.execute-api.us-east-1.amazonaws.com/api/booking/roomdetails`;
+    const [feedback, setFeedback] = useState();
+    const getRoomDetailsByRoomIdApiUrl = `https://q2di1m9y28.execute-api.us-east-1.amazonaws.com/api/booking/roomdetails`;
+    const roomBookingApiUrl = ``;
+    const feedbackApiUrl = ``;
     const data = {
         room_id: id.split("=")[1]
     }
 
     useEffect(() => {
         const getRoomDetails = async () => {
-            const response = await axios.post(getRoomDetailsByRoomIdAPIURL, data);
+            const response = await axios.post(getRoomDetailsByRoomIdApiUrl, data);
             console.log(response.data.body);
 
             setRoomDetails(response.data.body);
@@ -48,6 +52,17 @@ const RoomDetailsPage = () => {
             console.log("Total amount: ", amount);
         }
 
+        const bookingData = {
+            email: email,
+            room_id: roomDetails?.room_id,
+            start_date: formattedStartDate,
+            end_date: formattedEndDate,
+            total_days: noOfDays,
+            total_amount: amount
+        }
+
+        const response = axios.post(roomBookingApiUrl, bookingData);
+        console.log(response);
     }
 
     const startDateValidator = (startDate) => {
@@ -65,6 +80,16 @@ const RoomDetailsPage = () => {
         return selectedEndDate.isBefore(today) && selectedEndDate.isBefore(selectedStartDate);
     }
 
+    const callFeedbackButton = () => {
+        const feedbackData = {
+            email: email,
+            room_id: roomDetails?.room_id,
+            text: feedback
+        }
+
+        const response = axios.post(feedbackApiUrl, feedbackData);
+        console.log(response);
+    }
 
     return (
         <>
@@ -136,6 +161,21 @@ const RoomDetailsPage = () => {
                                     </div>
                                 </div>
                             )}
+                        </div>
+
+                        <div className="my-5">
+                            <h2 className="text-2xl font-bold mb-2">Give Feedback</h2>
+                            <div className="my-2">
+                                <TextInput placeholderText="Write your feedback"
+                                    value={feedback}
+                                    onChange={(value) => setFeedback(value)}
+                                    type="text" />
+                            </div>
+
+                            <SubmitButton
+                                buttonName="Give Feedback"
+                                callButtonFunction={callFeedbackButton}
+                            />
                         </div>
                     </div>
                 </div>
