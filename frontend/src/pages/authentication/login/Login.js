@@ -15,7 +15,7 @@ const Login = () => {
 
     const callLogin = async () => {
         if (validate()) {
-            const api_login_url = `https://q2di1m9y28.execute-api.us-east-1.amazonaws.com/api/authentication/login/1st`
+            const api_login_url = `${process.env.REACT_APP_BACKEND_URL}authentication/login/1st`
             const userData = {
                 email: email,
                 password: password,

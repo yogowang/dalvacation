@@ -18,7 +18,7 @@ const RoomDetailsPage = () => {
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [feedback, setFeedback] = useState();
-    const getRoomDetailsByRoomIdApiUrl = `https://q2di1m9y28.execute-api.us-east-1.amazonaws.com/api/booking/roomdetails`;
+    const getRoomDetailsByRoomIdApiUrl = `${process.env.REACT_APP_BACKEND_URL}booking/roomdetails`;
     const roomBookingApiUrl = ``;
     const feedbackApiUrl = ``;
     const data = {
