@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import { DeleteRoomDetails } from '../../pages/room-details/DeleteRoomDetails/DeleteRoomDetails';
 
-const RoomCard = ({ room_id, image_url, room_number, room_type, price, features }) => {
+const RoomCard = ({ room_id, image_url, room_number, room_type, price, features, link }) => {
     const userType = localStorage.getItem("userType")
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
@@ -38,7 +38,7 @@ const RoomCard = ({ room_id, image_url, room_number, room_type, price, features 
                         ))}
                     </ul>
                 </Typography>
-                <Link >
+                <Link to={link}>
                     <SubmitButton
                         buttonName="View Details"
                         callButtonFunction={callButtonFunction}

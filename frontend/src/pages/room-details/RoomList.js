@@ -10,7 +10,7 @@ export const RoomList = () => {
 
     useEffect(() => {
         const getAllRoomDetailsResponse = async () => {
-            const getAllRoomDetailsAPIURL = "https://q2di1m9y28.execute-api.us-east-1.amazonaws.com/api/booking/allroomdetails";
+            const getAllRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}booking/allroomdetails`;
 
             const response = await axios.post(getAllRoomDetailsAPIURL);
             console.log("response list: -- ", response.data.body[2].image_url);
@@ -32,7 +32,6 @@ export const RoomList = () => {
                 <Button variant="contained" style={{ marginRight: '44px' }} onClick={() => redirectToAddRoomDetails()}>Add Room</Button>
             </div>
             <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 m-4">
-                {console.log(roomDetails === undefined)}
                 {roomDetails !== undefined && roomDetails?.map((room) => (
                     <div>
                         <RoomCard
@@ -42,6 +41,7 @@ export const RoomList = () => {
                             room_number={room.room_number}
                             price={room.price}
                             features={room.features}
+                            link={`/room-details/id=${room.room_id}`}
                         />
                     </div>
                 ))}
