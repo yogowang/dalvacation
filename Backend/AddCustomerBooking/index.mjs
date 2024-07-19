@@ -10,7 +10,7 @@ const sqsQueueName = "room-booking-approval";
 const BOOKINGS_TABLE = 'CustomerBookings';
 
 export const handler = async (event) => {
-  const { customer_id, room_id, start_date, end_date, total_days, total_amount } = JSON.parse(event.body);
+  const { customer_email, room_id, start_date, end_date, total_days, total_amount } = event;
   
   const booking_reference_code = generateBookingReferenceCode();
   
@@ -19,7 +19,7 @@ export const handler = async (event) => {
       TableName: BOOKINGS_TABLE,
       Item: {
         booking_reference_code,
-        customer_id,
+        customer_email,
         room_id,
         start_date,
         end_date,
