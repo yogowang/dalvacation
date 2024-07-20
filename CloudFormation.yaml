@@ -85,6 +85,7 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaLogin3rdFactor.zip"
+ 
   # Lambda Feedback
   LambdaAddFeedback:
     Type: AWS::Lambda::Function
@@ -103,6 +104,7 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "AddFeedback.zip"
+ 
   LambdaReturnAllFeedback:
     Type: AWS::Lambda::Function
     Properties:
@@ -118,6 +120,7 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "ReturnAllFeedback.zip"
+ 
   LambdaGetFeedbackByRoomId:
     Type: AWS::Lambda::Function
     Properties:
@@ -133,6 +136,7 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "GetFeedbackByRoomId.zip"
+ 
   LambdaDeleteFeedbackById:
     Type: AWS::Lambda::Function
     Properties:
@@ -148,6 +152,7 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "DeleteFeedbackById.zip"
+  
   # Lambda - Booking
   LambdaGetAllRoomDetails:
     Type: AWS::Lambda::Function
@@ -260,6 +265,7 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref CustomerBookingsTable
+  
   # user stats
   LambdaUserCount:
     Type: AWS::Lambda::Function
@@ -276,6 +282,7 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "UserCount.zip"
+  
   # Lambda - Virtual Assistant
   LambdaRegister:
     Type: AWS::Lambda::Function
@@ -304,6 +311,28 @@ Resources:
       BatchSize: 10
       EventSourceArn: !GetAtt RoomBookingApprovalQueue.Arn
       FunctionName: !GetAtt ApproveRoomBooking.Arn
+
+  # CommonLambda for SNS
+  LambdaSNSNotification:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaSNSNotification"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::160536684166:role/LabRole"  # Replace with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          DalVacationHomeSnsTopicArn: !Ref DalVacationHomeSnsTopic
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket"
+        S3Key: "LambdaSNSNotification.zip"
+
+  DalVacationHomeSnsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: DalVacationHomeSnsTopic
 
   #Dynamo DB
   UserDalVacationDynamoTable:
@@ -407,6 +436,7 @@ Resources:
     Type: AWS::ApiGateway::RestApi
     Properties:
       Name: DalVacationHomeApiGateway
+  
   #User stats API
   UserStatsApiResource:
     Type: AWS::ApiGateway::Resource
@@ -414,12 +444,14 @@ Resources:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
       PathPart: "userStats"
+  
   UserCountApiResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt UserStatsApiResource.ResourceId
       PathPart: "userCount"
+  
   # Feedback API
   FeedbackApiResource:
     Type: AWS::ApiGateway::Resource
@@ -427,30 +459,35 @@ Resources:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
       PathPart: "feedback"
+  
   AddFeedbackApiResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt FeedbackApiResource.ResourceId
       PathPart: "addFeedback"
+  
   ReturnAllFeedbackApiResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt FeedbackApiResource.ResourceId
       PathPart: "returnAllFeedback"
+  
   GetFeedbackByRoomIdApiResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt FeedbackApiResource.ResourceId
       PathPart: "getFeedbackByRoomId"
+  
   DeleteFeedbackByIdApiResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt FeedbackApiResource.ResourceId
       PathPart: "DeleteFeedbackById"
+  
   # Authentication API Resource
   UserAuthenticationApiAuthenticationResource:
     Type: AWS::ApiGateway::Resource
@@ -712,6 +749,7 @@ Resources:
               application/json: ""
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+  
   AddFeedbackMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -741,6 +779,7 @@ Resources:
               application/json: ""
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+  
   ReturnAllFeedbackMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -770,6 +809,7 @@ Resources:
               application/json: ""
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+  
   GetFeedbackByRoomIdMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -799,6 +839,7 @@ Resources:
               application/json: ""
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+  
   DeleteFeedbackByIdMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -828,6 +869,7 @@ Resources:
               application/json: ""
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+  
   GetAllRoomDetailsMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -1007,6 +1049,7 @@ Resources:
               application/json: ""
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+  
   UserCountMethod:
     Type: AWS::ApiGateway::Method
     Properties:
