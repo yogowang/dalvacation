@@ -24,6 +24,3 @@ EXPOSE 5000
 
 # Command to serve the React app
 CMD ["serve", "-s", "build", "-l", "5000"]
-
-
-docker tag react-app gcr.io/dalvacationhome-429720/react-app
