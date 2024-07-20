@@ -33,6 +33,8 @@ Resources:
         Variables:
           DalVacationHomeUserPoolId: !Ref UserPool
           DalVacationHomeAppClientId: !Ref UserPoolClient
+          DalVacationHomeSnsTopicArn: !Ref DalVacationHomeSnsTopic
+
       Code:
         S3Bucket: "dalvacation-lambda-code" #replace it with your own S3bucket
         S3Key: "LambdaConfirmUser.zip"
@@ -430,6 +432,10 @@ Resources:
           MinimumLength: 8
           RequireNumbers: true
       MfaConfiguration: "OFF"
+      Schema:
+        - Name: user_type
+          AttributeDataType: String
+          Mutable: true
 
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
