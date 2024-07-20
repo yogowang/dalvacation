@@ -8,9 +8,21 @@ export const RoomDetailsForm = ({ roomNumber, setRoomNumber,
     roomType, setRoomType,
     roomPrice, setRoomPrice,
     features, setFeatures,
+    imageBuffer, setImageBuffer,
     onSubmit
 }) => {
     const navigate = useNavigate();
+    const [roomImage, setRoomImage] = useState("https://cdn.pixabay.com/photo/2021/10/11/00/59/upload-6699084_1280.png")
+
+    const handleRoomPictureChange = (e) => {
+        setRoomImage(e.target.files[0]);
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImageBuffer(reader.result); // Convert to Base64 and store
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    };
 
     const validate = () => {
         if (!roomNumber) {
@@ -75,6 +87,26 @@ export const RoomDetailsForm = ({ roomNumber, setRoomNumber,
                     onChange={(value) => setRoomPrice(value)}
                     type="number"
                 />
+                <div className="mb-8 h-fit rounded-lg bg-white p-8 shadow-md">
+                    <h2 className="mb-4 text-2xl font-bold">Room Image</h2>
+                    {roomImage && (
+                        <div className="mt-4">
+                            <img
+                                src={roomImage}
+                                alt="Profile"
+                                className="mx-auto object-cover"
+                            />
+                        </div>
+                    )}
+                    <input
+                        type="file"
+                        id="profile_picture"
+                        name="profile_picture"
+                        accept="image/*"
+                        className="mt-2 block w-full"
+                        onChange={handleRoomPictureChange}
+                    />
+                </div>
 
                 {features.map((feature, index) => (
                     <TextInput

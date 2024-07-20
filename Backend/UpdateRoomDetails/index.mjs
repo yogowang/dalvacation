@@ -7,7 +7,7 @@ const dynamodb = DynamoDBDocumentClient.from(client);
 const ROOMS_TABLE = 'Rooms';
 
 export const handler = async (event) => {
-  const { room_id, room_number, room_type, price, features } = JSON.parse(event.body);
+  const { room_id, room_number, room_type, price, features } = event;
 
   try {
     const getParams = {

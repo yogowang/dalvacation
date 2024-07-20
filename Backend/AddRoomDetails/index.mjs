@@ -8,14 +8,15 @@ const dynamodb = DynamoDBDocumentClient.from(client);
 const s3 = new S3Client({});
 
 const ROOMS_TABLE = 'Rooms';
-const BUCKET_NAME = "hotel-room-images";
+const BUCKET_NAME = "hotel-room-images-dvh-1";
 
 export const handler = async (event) => {
-  const { room_number, room_type, price, features, file_content_base64, file_type } = JSON.parse(event.body);
-  
+  const { room_number, room_type, price, features, file_content_base64, file_type } = event;
+  console.log(event)
+
   const file_content = Buffer.from(file_content_base64, 'base64');
   const file_name = `room-${room_number}.${file_type}`;
-  
+
   try {
     let scanParams = {
       TableName: ROOMS_TABLE,
@@ -24,9 +25,9 @@ export const handler = async (event) => {
         ":room_number": room_number
       }
     };
-    
+
     const existingRooms = await dynamodb.send(new ScanCommand(scanParams));
-    
+
     if (existingRooms.Count > 0) {
       return {
         statusCode: 400,
@@ -38,12 +39,12 @@ export const handler = async (event) => {
       TableName: ROOMS_TABLE,
       ProjectionExpression: "room_id"
     };
-    
+
     const data = await dynamodb.send(new ScanCommand(scanParams));
     const maxRoomId = data.Items.reduce((max, item) => Math.max(max, parseInt(item.room_id)), 0);
-    
+
     const newRoomId = (maxRoomId + 1).toString();
-  
+
     const s3Params = {
       Bucket: BUCKET_NAME,
       Key: file_name,
@@ -54,7 +55,7 @@ export const handler = async (event) => {
     };
 
     await s3.send(new PutObjectCommand(s3Params));
-    
+
     const image_url = `https://${BUCKET_NAME}.s3.amazonaws.com/${file_name}`;
 
     const params = {
@@ -70,13 +71,14 @@ export const handler = async (event) => {
     };
 
     await dynamodb.send(new PutCommand(params));
-    
+
     return {
       statusCode: 200,
       body: JSON.stringify({ message: 'Room added successfully', room_id: newRoomId }),
     };
   }
   catch (error) {
+    console.log(error)
     return {
       statusCode: 500,
       body: JSON.stringify({ message: 'Failed to add room', error: error.message }),

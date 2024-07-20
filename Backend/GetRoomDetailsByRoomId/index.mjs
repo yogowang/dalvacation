@@ -7,7 +7,7 @@ const dynamodb = DynamoDBDocumentClient.from(client);
 const ROOMS_TABLE = 'Rooms';
 
 export const handler = async (event) => {
-  const { room_id } = event.queryStringParameters;
+  const { room_id } = event;
 
   try {
     const params = {
@@ -28,7 +28,7 @@ export const handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(data.Item),
+      body: data.Item
     };
   }
   catch (error) {

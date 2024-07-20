@@ -15,15 +15,19 @@ export const UpdateRoomDetails = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const data = {
+            room_id: room_id
+        }
         const getRoomDetailsResponse = async () => {
-            const getRoomDetailsByRoomIdAPIURL = `https://mdrhqbeyvrep2ndjnr3nwxrnpq0ytxxm.lambda-url.us-east-1.on.aws/?room_id=${room_id}`;
+            const getRoomDetailsByRoomIdAPIURL = `https://q2di1m9y28.execute-api.us-east-1.amazonaws.com/api/booking/roomdetails`;
 
-            const response = await axios.get(getRoomDetailsByRoomIdAPIURL);
-            
-            setRoomNumber(response.data.room_number);
-            setRoomType(response.data.room_type);
-            setRoomPrice(response.data.price);
-            setFeatures(response.data.features);
+            const response = await axios.post(getRoomDetailsByRoomIdAPIURL, data);
+            console.log(response.data);
+
+            setRoomNumber(response.data.body.room_number);
+            setRoomType(response.data.body.room_type);
+            setRoomPrice(response.data.body.price);
+            setFeatures(response.data.body.features);
         }
 
         getRoomDetailsResponse();
@@ -38,9 +42,10 @@ export const UpdateRoomDetails = () => {
             features: features
         }
 
-        const updateRoomDetailsAPIURL = "https://ykh4kth4fqliqyixnb6hw24ima0tckjg.lambda-url.us-east-1.on.aws/";
-        const response = await axios.put(updateRoomDetailsAPIURL, data);
+        const updateRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}/booking/updateroomdetails`;
+        const response = await axios.post(updateRoomDetailsAPIURL, data);
 
+        console.log(data);
         navigate('/room-details');
     }
 

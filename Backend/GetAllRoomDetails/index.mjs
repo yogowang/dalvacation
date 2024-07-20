@@ -13,10 +13,11 @@ export const handler = async (event) => {
     };
 
     const data = await dynamodb.send(new ScanCommand(scanParams));
+    console.log("data item: ", data.Item)
 
     return {
       statusCode: 200,
-      body: JSON.stringify(data.Items),
+      body: data.Items,
     };
   } catch (error) {
     return {
