@@ -277,7 +277,7 @@ Resources:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "UserCount.zip"
   # Lambda - Virtual Assistant
-  LambdaRegister:
+  LambdaVirtualAssistant:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: "LambdaVirtualAssistant"
