@@ -1,0 +1,19 @@
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'build', '-t', 'gcr.io/your-project-id/react-app', '.' ]
+
+  # Push the Docker image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push', 'gcr.io/your-project-id/react-app' ]
+
+  # Deploy to CloudRun
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'react-app'
+      - '--image=gcr.io/your-project-id/react-app'
+      - '--platform=managed'  # Ensure it deploys to CloudRun
+      - '--region=us-central1'  # Choose your region
+      - '--allow-unauthenticated'  # Allows unauthenticated access (customize as needed)
