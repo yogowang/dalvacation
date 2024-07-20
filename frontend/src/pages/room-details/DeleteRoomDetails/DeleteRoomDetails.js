@@ -26,7 +26,7 @@ export const DeleteRoomDetails = ({ open, handleClose, room_id, room_number }) =
     }
 
     const onSubmit = async () => {
-        const deleteRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}booking/deleteroomdetails`;
+        const deleteRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}/booking/deleteroomdetails`;
 
         const response = await axios.post(deleteRoomDetailsAPIURL, data);
         console.log("delete response: ", response);

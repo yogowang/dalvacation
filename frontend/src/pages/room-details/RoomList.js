@@ -10,7 +10,7 @@ export const RoomList = () => {
 
     useEffect(() => {
         const getAllRoomDetailsResponse = async () => {
-            const getAllRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}booking/allroomdetails`;
+            const getAllRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}/booking/allroomdetails`;
 
             const response = await axios.post(getAllRoomDetailsAPIURL);
             console.log("response list: -- ", response.data.body[2].image_url);

@@ -15,7 +15,7 @@ const Login = () => {
 
     const callLogin = async () => {
         if (validate()) {
-            const api_login_url = `${process.env.REACT_APP_BACKEND_URL}authentication/login/1st`
+            const api_login_url = `${process.env.REACT_APP_BACKEND_URL}/authentication/login/1st`
             const userData = {
                 email: email,
                 password: password,
