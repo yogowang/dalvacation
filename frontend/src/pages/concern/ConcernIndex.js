@@ -18,7 +18,7 @@ export const ConcernIndex = () => {
                     email
                 }
                 const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/concern/getallconcerns`, payload)
-                setConcerns(response.data.concerns);
+                setConcerns(JSON.parse(response.data.body).concerns);
             } catch (error) {
                 if (error.response.status === 404) {
                     //not found

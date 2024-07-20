@@ -414,7 +414,7 @@ Resources:
     Properties:
       FunctionName: "LambdaSNSNotification"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::160536684166:role/LabRole"  # Replace with your own LabRole ARN
+      Role: "arn:aws:iam::053346983886:role/LabRole"  # Replace with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -422,7 +422,7 @@ Resources:
         Variables:
           DalVacationHomeSnsTopicArn: !Ref DalVacationHomeSnsTopic
       Code:
-        S3Bucket: "dalvacation-lambda-bucket"
+        S3Bucket: "dalvacation-lambda-code"
         S3Key: "LambdaSNSNotification.zip"
 
   DalVacationHomeSnsTopic:
@@ -689,10 +689,10 @@ Resources:
   #Concern API Resource
   ConcernApiResource:
     Type: AWS::ApiGateway::Resource
-      Properties:
-        RestApiId: !Ref DalVacationHomeApiGateway
-        ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
-        PathPart: "concern"
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
+      PathPart: "concern"
 
   ConcernApiHandleConcernCommunicationResource:
     Type: AWS::ApiGateway::Resource
@@ -718,9 +718,9 @@ Resources:
   # Virtual Assistant API resource
   VirtualAssistantApiResource:
     Type: AWS::ApiGateway::Resource
-      Properties:
-        RestApiId: !Ref DalVacationHomeApiGateway
-        ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
       PathPart: "virtual-assistant"
 
   # API GATEWAY - Methods

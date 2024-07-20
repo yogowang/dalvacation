@@ -30,7 +30,7 @@ export const ConcernCard = ({ concern, user_type }) => {
             }
             const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/concern/getconcernchat`, payload)
 
-            setChat(response.data.chat);
+            setChat(JSON.parse(response.data.body).chat);
             setOpen(true);
         } catch (error) {
             console.log(error);

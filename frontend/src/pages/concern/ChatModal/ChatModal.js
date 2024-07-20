@@ -34,7 +34,7 @@ export const ChatModal = ({ open, handleOpen, handleClose, chat, user_type, mess
                     user_type,
                     message: inputText
                 }
-                const response = await axios.post('https://axjz25cwtgvctfbm34y7su7sb40inklk.lambda-url.us-east-1.on.aws/', payload);
+                const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/concern/handleconcerncommunication`, payload);
                 handleClose(true);
             } catch (error) {
                 console.log(error);
