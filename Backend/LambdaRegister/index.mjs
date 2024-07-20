@@ -29,7 +29,8 @@ export const handler = async (event) => {
         { Name: 'email', Value: email },
         { Name: 'name', Value: fullname },
         { Name: 'phone_number', Value: phone_no },
-        { Name: 'address', Value: address }
+        { Name: 'address', Value: address },
+        { Name: 'custom:user_type', Value: user_type } 
       ]
     };
 
