@@ -7,7 +7,7 @@ export const handler = async (event) => {
   try{
     const req = JSON.parse(event.body);
     const pubsubMessage = JSON.parse(Buffer.from(req.message.data, 'base64').toString('utf-8'));
-    const {booking_reference_code, customer_email, message} = pubsubMessage;
+    const {booking_reference_code, customer_email} = pubsubMessage;
     
     const params = {
       TableName: "UserDalVacation",
@@ -38,10 +38,7 @@ export const handler = async (event) => {
         message_id: { S: message_id },
         customer_email: { S: customer_email },
         property_agent_email: { S: property_agent_email },
-        booking_reference_code: {S: booking_reference_code},
-        chat: {
-          S: JSON.stringify([{ customer: message }])
-        }
+        booking_reference_code: {S: booking_reference_code}
       }
     };
 

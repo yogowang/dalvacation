@@ -4,7 +4,7 @@ const client = new DynamoDBClient({});
 
 export const handler = async (event) => {
   try {
-    const { email } = event.queryStringParameters;
+    const { email } = event;
 
     const params = {
       TableName: "Messages",

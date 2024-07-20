@@ -4,7 +4,7 @@ const client = new DynamoDBClient({});
 
 export const handler = async (event) => {
   try{
-    const { message_id, user_type, message } = JSON.parse(event.body);
+    const { message_id, user_type, message } = event;
     
     const getItemParams = {
       TableName: "Messages",
@@ -23,7 +23,7 @@ export const handler = async (event) => {
       };
     }
     
-    let chatArray = JSON.parse(item.chat.S);
+    let chatArray = item.chat && item.chat.S ? JSON.parse(item.chat.S) : [];
     if (user_type === "property_agent") {
       const lastElement = chatArray[chatArray.length - 1];
       lastElement.property_agent = message;

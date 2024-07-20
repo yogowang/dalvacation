@@ -8,11 +8,14 @@ const pubsub = new PubSub({ projectId });
 const topic = pubsub.topic(topicId);
 
 functions.http('customer_concern_publisher', async (req, res) => {
-  const { booking_reference_code, customer_email, message} = req.body;
+  res.set('Access-Control-Allow-Origin', '*'); // Adjust as needed
+  res.set('Access-Control-Allow-Methods', 'POST');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+  const { booking_reference_code, customer_email} = req.body;
   const messageData = {
     booking_reference_code,
-    customer_email,
-    message
+    customer_email
   };
 
   const messageBuffer = Buffer.from(JSON.stringify(messageData));

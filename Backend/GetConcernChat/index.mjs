@@ -4,7 +4,7 @@ const client = new DynamoDBClient({});
 
 export const handler = async (event) => {
   try {
-    const { message_id } = event.queryStringParameters;
+    const { message_id } = event;
 
     if (!message_id) {
       return {
@@ -30,7 +30,7 @@ export const handler = async (event) => {
       };
     }
 
-    const chat = JSON.parse(item.chat.S);
+    let chat = item.chat && item.chat.S ? JSON.parse(item.chat.S) : [];
 
     return {
       statusCode: 200,
