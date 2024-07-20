@@ -42,7 +42,7 @@ export const UpdateRoomDetails = () => {
             features: features
         }
 
-        const updateRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}booking/updateroomdetails`;
+        const updateRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}/booking/updateroomdetails`;
         const response = await axios.post(updateRoomDetailsAPIURL, data);
 
         console.log(data);
