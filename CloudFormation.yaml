@@ -276,6 +276,19 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "UserCount.zip"
+  # Lambda - Virtual Assistant
+  LambdaRegister:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaVirtualAssistant"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
+        S3Key: "LambdaVirtualAssistant.zip"
 
   #SQS
   RoomBookingApprovalQueue:
@@ -343,6 +356,20 @@ Resources:
           AttributeType: "S"
       KeySchema:
         - AttributeName: "booking_reference_code"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+        
+  CustomerBookingsTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      TableName: "navigate_website"
+      AttributeDefinitions:
+        - AttributeName: "action"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "action"
           KeyType: "HASH"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
@@ -525,6 +552,14 @@ Resources:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt RoomBookingApiResource.ResourceId
       PathPart: "addcustomerbooking"
+
+  # Virtual Assistant API resource
+  VirtualAssistantApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
+      PathPart: "virtual-assistant"
 
   # API GATEWAY - Methods
   # Authentication API Methods
@@ -1002,6 +1037,36 @@ Resources:
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
 
+  VirtualAssistantMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref VirtualAssistantApiResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaVirtualAssistant.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+
   DalVacationHomeApiStage:
     Type: AWS::ApiGateway::Stage
     Properties:
@@ -1028,5 +1093,6 @@ Resources:
       - DeleteFeedbackByIdMethod
       - AddCustomerBookingMethod
       - UserCountMethod
+      - VirtualAssistantMethod
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
