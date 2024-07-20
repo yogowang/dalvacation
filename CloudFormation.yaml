@@ -341,6 +341,76 @@ Resources:
             Resource: !Sub arn:aws:s3:::hotel-room-images/*
             Principal: "*"
 
+  CustomerConcernSubscriber:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "customer-concern-subscriber"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::053346983886:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Code:
+        S3Bucket: "dalvacation-lambda-code" #replace it with your own S3bucket
+        S3Key: "customer-concern-subscriber.zip"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref MessagesTable
+  
+  CustomerConcernSubscriberUrl:
+    Type: AWS::Lambda::Url
+    Properties:
+      TargetFunctionArn: !GetAtt CustomerConcernSubscriber.Arn
+      AuthType: NONE
+
+  HandleConcernCommunication:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "handle-concern-communication"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::053346983886:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Code:
+        S3Bucket: "dalvacation-lambda-code" #replace it with your own S3bucket
+        S3Key: "handle-concern-communication.zip"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref MessagesTable
+  
+  GetAllConcerns:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "get-all-concerns"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::053346983886:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Code:
+        S3Bucket: "dalvacation-lambda-code" #replace it with your own S3bucket
+        S3Key: "get-all-concerns.zip"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref MessagesTable
+
+  GetConcernChat:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "get-concern-chat"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::053346983886:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Code:
+        S3Bucket: "dalvacation-lambda-code" #replace it with your own S3bucket
+        S3Key: "get-concern-chat.zip"
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref MessagesTable
+
   #SQS
   RoomBookingApprovalQueue:
     Type: AWS::SQS::Queue
@@ -443,6 +513,20 @@ Resources:
           AttributeType: "S"
       KeySchema:
         - AttributeName: "action"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  MessagesTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      TableName: "Messages"
+      AttributeDefinitions:
+        - AttributeName: "message_id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "message_id"
           KeyType: "HASH"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
@@ -643,6 +727,35 @@ Resources:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt RoomBookingApiResource.ResourceId
       PathPart: "addcustomerbooking"
+
+  #Concern API Resource
+  ConcernApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
+      PathPart: "concern"
+
+  ConcernApiHandleConcernCommunicationResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt ConcernApiResource.ResourceId
+      PathPart: "handleconcerncommunication"
+
+  ConcernApiGetAllConcernsResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt ConcernApiResource.ResourceId
+      PathPart: "getallconcerns"
+
+  ConcernApiGetConcernChatResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt ConcernApiResource.ResourceId
+      PathPart: "getconcernchat"
 
   # Virtual Assistant API resource
   VirtualAssistantApiResource:
@@ -1134,6 +1247,96 @@ Resources:
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
 
+  HandleConcernCommunicationMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref ConcernApiHandleConcernCommunicationResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${HandleConcernCommunication.Arn}/invocations"
+        Credentials: "arn:aws:iam::053346983886:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+
+  GetAllConcernsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref ConcernApiGetAllConcernsResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetAllConcerns.Arn}/invocations"
+        Credentials: "arn:aws:iam::053346983886:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+
+  GetConcernChatMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref ConcernApiGetConcernChatResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetConcernChat.Arn}/invocations"
+        Credentials: "arn:aws:iam::053346983886:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+
   VirtualAssistantMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -1220,6 +1423,9 @@ Resources:
       - DeleteFeedbackByIdMethod
       - AddCustomerBookingMethod
       - UserCountMethod
+      - HandleConcernCommunicationMethod
+      - GetAllConcernsMethod
+      - GetConcernChatMethod
       - VirtualAssistantMethod
       - GetIncomeByAgentMethod
     Properties:
