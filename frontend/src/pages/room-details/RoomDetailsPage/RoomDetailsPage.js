@@ -13,26 +13,28 @@ import TextInput from "../../../components/input/TextInput";
 const RoomDetailsPage = () => {
     const { id } = useParams();
     const userType = localStorage.getItem("userType")
-    const email = localStorage.getItem("email")
+    const email = localStorage.getItem("email");
     const [roomDetails, setRoomDetails] = useState();
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
     const [feedback, setFeedback] = useState();
     const getRoomDetailsByRoomIdApiUrl = `${process.env.REACT_APP_BACKEND_URL}/booking/roomdetails`;
-    const roomBookingApiUrl = ``;
-    const feedbackApiUrl = ``;
+    const roomBookingApiUrl = `${process.env.REACT_APP_BACKEND_URL}/booking/addcustomerbooking`;
+    const feedbackApiUrl = `${process.env.REACT_APP_BACKEND_URL}/feedback/addFeedback`;
     const data = {
         room_id: id.split("=")[1]
     }
 
     useEffect(() => {
+        console.log(data);
         const getRoomDetails = async () => {
             const response = await axios.post(getRoomDetailsByRoomIdApiUrl, data);
-            console.log(response.data.body);
+            console.log("response", response.data.body);
 
             setRoomDetails(response.data.body);
-            console.log("features: ", roomDetails?.features)
+
         }
+        console.log("features: ", roomDetails)
 
         getRoomDetails()
     }, [])
@@ -62,7 +64,7 @@ const RoomDetailsPage = () => {
         }
 
         const response = axios.post(roomBookingApiUrl, bookingData);
-        console.log(response);
+        toast("You booking request is being processed.")
     }
 
     const startDateValidator = (startDate) => {
