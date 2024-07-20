@@ -192,7 +192,6 @@ const RoomDetailsPage = () => {
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </>
