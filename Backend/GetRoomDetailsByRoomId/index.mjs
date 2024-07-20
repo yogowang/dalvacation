@@ -7,7 +7,6 @@ const dynamodb = DynamoDBDocumentClient.from(client);
 const ROOMS_TABLE = 'Rooms';
 
 export const handler = async (event) => {
-  console.log(event)
   const { room_id } = event;
 
   try {
@@ -29,7 +28,7 @@ export const handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: data.Item,
+      body: data.Item
     };
   }
   catch (error) {
