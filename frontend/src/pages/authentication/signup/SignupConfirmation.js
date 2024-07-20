@@ -12,7 +12,7 @@ const SignupConfirmation = () => {
 
     const callConfirmationCode = async () => {
         if (confirmationCode) {
-            const api_confirmation_code_factor_url = `${process.env.REACT_APP_BACKEND_URL}authentication/signup/confirmation`//`${process.env.REACT_APP_BACKEND_URL}api/users/login`;
+            const api_confirmation_code_factor_url = `${process.env.REACT_APP_BACKEND_URL}/authentication/signup/confirmation`;
             const userData = {
                 email: email,
                 confirmationCode: confirmationCode,

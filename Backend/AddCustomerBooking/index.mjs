@@ -11,9 +11,9 @@ const BOOKINGS_TABLE = 'CustomerBookings';
 
 export const handler = async (event) => {
   const { customer_email, room_id, start_date, end_date, total_days, total_amount } = event;
-  
+
   const booking_reference_code = generateBookingReferenceCode();
-  
+
   try {
     const bookingParams = {
       TableName: BOOKINGS_TABLE,
@@ -30,7 +30,7 @@ export const handler = async (event) => {
     };
 
     await dynamodb.send(new PutCommand(bookingParams));
-    
+
     const queueUrlResponse = await sqsClient.send(new GetQueueUrlCommand({ QueueName: sqsQueueName }));
     const sqsQueueUrl = queueUrlResponse.QueueUrl;
 
@@ -43,7 +43,7 @@ export const handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: 'Booking added successfully', booking_reference_code }),
+      body: { message: 'Booking added successfully', booking_reference_code },
     };
   }
   catch (error) {

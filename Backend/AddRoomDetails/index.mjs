@@ -11,8 +11,8 @@ const ROOMS_TABLE = 'Rooms';
 const BUCKET_NAME = "hotel-room-images-dvh-1";
 
 export const handler = async (event) => {
-  console.log(event);
-  const { agent_email, room_number, room_type, price, features, file_content_base64, file_type } = event;
+  const { room_number, room_type, price, features, file_content_base64, file_type } = event;
+  console.log(event)
 
   const file_content = Buffer.from(file_content_base64, 'base64');
   const file_name = `room-${room_number}.${file_type}`;
@@ -49,7 +49,8 @@ export const handler = async (event) => {
       Bucket: BUCKET_NAME,
       Key: file_name,
       Body: file_content,
-      ContentType: `image/jpeg`,
+      ContentEncoding: 'base64',
+      ContentType: `image/${file_type}`,
       ACL: 'public-read'
     };
 
@@ -60,7 +61,6 @@ export const handler = async (event) => {
     const params = {
       TableName: ROOMS_TABLE,
       Item: {
-        agent_email: agent_email,
         room_id: newRoomId,
         room_number,
         room_type,
@@ -78,6 +78,7 @@ export const handler = async (event) => {
     };
   }
   catch (error) {
+    console.log(error)
     return {
       statusCode: 500,
       body: JSON.stringify({ message: 'Failed to add room', error: error.message }),

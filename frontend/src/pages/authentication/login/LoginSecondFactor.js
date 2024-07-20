@@ -13,7 +13,7 @@ const LoginSecondFactor = () => {
 
     const callSecondFactorAuth = async () => {
         if (answer) {
-            const api_login_2_factor_url = `${process.env.REACT_APP_BACKEND_URL}authentication/login/2nd`
+            const api_login_2_factor_url = `${process.env.REACT_APP_BACKEND_URL}/authentication/login/2nd`
             const userData = {
                 email: email,
                 question: question,
