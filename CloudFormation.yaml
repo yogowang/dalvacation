@@ -114,7 +114,7 @@ Resources:
       MemorySize: 512
       Environment:
         Variables:
-          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable 
+          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "ReturnAllFeedback.zip"
@@ -129,7 +129,7 @@ Resources:
       MemorySize: 512
       Environment:
         Variables:
-          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable 
+          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "GetFeedbackByRoomId.zip"
@@ -144,7 +144,7 @@ Resources:
       MemorySize: 512
       Environment:
         Variables:
-          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable 
+          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "DeleteFeedbackById.zip"
@@ -689,7 +689,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -718,7 +718,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -747,7 +747,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -776,7 +776,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1030,4 +1030,3 @@ Resources:
       - UserCountMethod
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
-  

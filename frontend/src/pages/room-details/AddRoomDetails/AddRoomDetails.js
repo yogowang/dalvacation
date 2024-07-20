@@ -27,7 +27,7 @@ export const AddRoomDetails = () => {
         }
 
         console.log("data:", data);
-        const addRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}booking/addroomdetails`;
+        const addRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}/booking/addroomdetails`;
         const response = await axios.post(addRoomDetailsAPIURL, data);
         console.log(response);
 

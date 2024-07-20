@@ -43,7 +43,7 @@ const Signup = () => {
 
             console.log(userData);
 
-            const api_signup_url = `${process.env.REACT_APP_BACKEND_URL}authentication/signup`;
+            const api_signup_url = `${process.env.REACT_APP_BACKEND_URL}/authentication/signup`;
 
             console.log("backend url: ", api_signup_url);
 
