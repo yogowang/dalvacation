@@ -285,6 +285,22 @@ Resources:
         S3Bucket: "dalvacation-lambda-code" #replace it with your own S3bucket
         S3Key: "UserCount.zip"
   
+  LambdaGetIncomeByAgent:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaGetIncomeByAgent"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          RoomsDynamoTableName: !Ref RoomsTable
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
+        S3Key: "GetIncomeByAgent.zip"
+
   # Lambda - Virtual Assistant
   LambdaVirtualAssistant:
     Type: AWS::Lambda::Function
@@ -346,7 +362,7 @@ Resources:
     Properties:
       FunctionName: "LambdaSNSNotification"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::160536684166:role/LabRole"  # Replace with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole"  # Replace with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -354,7 +370,7 @@ Resources:
         Variables:
           DalVacationHomeSnsTopicArn: !Ref DalVacationHomeSnsTopic
       Code:
-        S3Bucket: "dalvacation-lambda-bucket"
+        S3Bucket: "dalvacation-lambda-bucket-yuci"
         S3Key: "LambdaSNSNotification.zip"
 
   DalVacationHomeSnsTopic:
@@ -417,6 +433,20 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+        
+  NavigateWebsiteTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      TableName: "navigate_website"
+      AttributeDefinitions:
+        - AttributeName: "action"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "action"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
 
   # Cognito
   UserPool:
@@ -469,6 +499,12 @@ Resources:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt UserStatsApiResource.ResourceId
       PathPart: "userCount"
+  GetIncomeByAgentApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt UserStatsApiResource.ResourceId
+      PathPart: "getIncomeByAgent"
   
   # Feedback API
   FeedbackApiResource:
@@ -1118,7 +1154,37 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaVirtualAssistant.Arn}/invocations"
-        Credentials: "arn:aws:iam::053346983886:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+   
+  GetIncomeByAgentMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref GetIncomeByAgentApiResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetIncomeByAgent.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1155,5 +1221,6 @@ Resources:
       - AddCustomerBookingMethod
       - UserCountMethod
       - VirtualAssistantMethod
+      - GetIncomeByAgentMethod
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
