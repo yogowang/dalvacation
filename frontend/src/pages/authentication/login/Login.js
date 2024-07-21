@@ -19,8 +19,9 @@ const Login = () => {
             const userData = {
                 email: email,
                 password: password,
-                userType: userType,
+                user_type: userType.toLowerCase(),
             };
+            console.log(userData);
 
             console.log("url: ", api_login_url);
 
@@ -28,12 +29,10 @@ const Login = () => {
                 api_login_url,
                 userData
             );
-            console.log(response);
 
             if (response.data.statusCode === 200) {
                 localStorage.setItem("email", email);
-                localStorage.setItem("question", response.data.body.userQAQuestion);
-                localStorage.setItem("accessToken", response.data.body.authResponse.AuthenticationResult.AccessToken);
+                localStorage.setItem("question", JSON.parse(response.data.body).userQAQuestion);
                 localStorage.setItem("userType", userType);
                 navigate("/login-2-factor") //navigate to 2nd factor
             } else {
