@@ -10,7 +10,7 @@ import {
 const Navbar = () => {
   // const [dropDownMenu, setDropDownMenu] = useState(false);
   const navigate = useNavigate();
-  const accessToken = localStorage.getItem("accessToken");
+  const email = localStorage.getItem("email");
   let Links = [
     {
       name: "ROOMS",
@@ -18,7 +18,6 @@ const Navbar = () => {
     }
   ];
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
     localStorage.removeItem("email");
     localStorage.removeItem("question");
     navigate("/login");
@@ -62,7 +61,7 @@ const Navbar = () => {
               </li>
             ))}
 
-            {accessToken ? (
+            {email ? (
               <>
                 <li>
                   <button onClick={handleLogout} className="btn rounded bg-blue-500 px-3 py-1 font-semibold text-white duration-500 hover:bg-blue-700 md:static md:ml-8">

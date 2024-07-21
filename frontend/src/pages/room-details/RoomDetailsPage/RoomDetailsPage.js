@@ -54,7 +54,7 @@ const RoomDetailsPage = () => {
             toast.error("End Date cannot be before start date or today's date.");
         } else {
             const bookingData = {
-                email: email,
+                customer_email: email,
                 room_id: roomDetails?.room_id,
                 start_date: formattedStartDate,
                 end_date: formattedEndDate,
