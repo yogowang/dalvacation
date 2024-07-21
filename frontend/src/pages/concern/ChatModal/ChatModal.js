@@ -31,7 +31,7 @@ export const ChatModal = ({ open, handleOpen, handleClose, chat, user_type, mess
             try {
                 const payload = {
                     message_id,
-                    user_type,
+                    user_type: user_type.toLowerCase(),
                     message: inputText
                 }
                 const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/concern/handleconcerncommunication`, payload);
@@ -70,7 +70,7 @@ export const ChatModal = ({ open, handleOpen, handleClose, chat, user_type, mess
         });
 
         return chatMessages.map((message, index) => {
-            const isCurrentUser = (message.type === 'customer' && user_type === 'customer') || (message.type === 'property_agent' && user_type === 'property_agent');
+            const isCurrentUser = (message.type === 'customer' && user_type === 'Customer') || (message.type === 'property_agent' && user_type === 'Property_Agent');
 
             return (
                 <ListItem

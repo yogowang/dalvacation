@@ -84,7 +84,7 @@ Resources:
       Environment:
         Variables:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
-          LambdaSNSNotificationName: !GetAtt DalVacationHomeSnsTopic.Name
+          LambdaSNSNotificationName: !Ref LambdaSNSNotification
       Code:
         S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
         S3Key: "LambdaLogin3rdFactor.zip"
@@ -268,7 +268,7 @@ Resources:
       Environment:
         Variables:
           TABLE_NAME: !Ref CustomerBookingsTable
-          LambdaSNSNotificationName: !GetAtt DalVacationHomeSnsTopic.Name
+          LambdaSNSNotificationName: !Ref LambdaSNSNotification
 
   # user stats
   LambdaUserCount:
@@ -418,7 +418,7 @@ Resources:
     Properties:
       FunctionName: "LambdaSNSNotification"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::082497693506:role/LabRole" # Replace with your own LabRole ARN
+      Role: "arn:aws:iam::909715103412:role/LabRole" # Replace with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -426,7 +426,7 @@ Resources:
         Variables:
           DalVacationHomeSnsTopicArn: !Ref DalVacationHomeSnsTopic
       Code:
-        S3Bucket: "dalvacation-lambda-bucket-yuci"
+        S3Bucket: "dalvacationhome-backend"
         S3Key: "LambdaSNSNotification.zip"
 
   DalVacationHomeSnsTopic:
@@ -1337,7 +1337,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaVirtualAssistant.Arn}/invocations"
-        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        Credentials: "arn:aws:iam::909715103412:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
