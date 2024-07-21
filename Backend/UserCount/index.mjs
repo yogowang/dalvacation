@@ -13,6 +13,10 @@ export const handler = async (event) => {
   try {
     const params = {
       TableName: tableName,
+      FilterExpression: "user_type = :user_type",
+      ExpressionAttributeValues: {
+        ":user_type": "customer"
+      },
       Select: 'COUNT'
     };
 
