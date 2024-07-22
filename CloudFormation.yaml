@@ -303,7 +303,7 @@ Resources:
   HotelRoomImagesBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: "hotel-room-images"
+      BucketName: "hotel-room-imagess"
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: false
@@ -322,7 +322,7 @@ Resources:
               - s3:GetObject
               - s3:PutObject
             Effect: Allow
-            Resource: !Sub arn:aws:s3:::hotel-room-images/*
+            Resource: !Sub arn:aws:s3:::hotel-room-imagess/*
             Principal: "*"
 
   CustomerConcernSubscriber:
@@ -432,10 +432,41 @@ Resources:
     Properties:
       DisplayName: DalVacationHomeSnsTopic
 
-  GCPLookerStudioDataSource:
+  AddLookerStudioDataToGcpSql:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: "GCPLookerStudioDataSource"
+      FunctionName: "AddLookerStudioDataToGcpSql"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::160536684166:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
+        S3Key: "AddLookerStudioDataToGcpSql.zip"
+
+  GetBookingsByAgent:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "GetBookingsByAgent"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::160536684166:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          BookingsDalVacationDynamoTableName: !Ref CustomerBookingsTable
+          RoomsDalVacationDynamoTableName: !Ref RoomsTable
+          AddLookerStudioDataToGcpSqlLambdaName: !Ref AddLookerStudioDataToGcpSql
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
+        S3Key: "GetBookingsByAgent.zip"
+
+  GetMetricesByAgent:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "GetMetricesByAgent"
       Runtime: "nodejs20.x"
       Role: "arn:aws:iam::160536684166:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
@@ -445,10 +476,10 @@ Resources:
         Variables:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
           RoomsDalVacationDynamoTableName: !Ref RoomsTable
-          BookingsDalVacationDynamoTableName: !Ref CustomerBookingsTable
+          AddLookerStudioDataToGcpSqlLambdaName: !Ref AddLookerStudioDataToGcpSql
       Code:
         S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
-        S3Key: "GCPLookerStudioDataSource.zip"
+        S3Key: "GetMetricesByAgent.zip"
 
   #Dynamo DB
   UserDalVacationDynamoTable:
@@ -458,12 +489,17 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "email"
           AttributeType: "S"
+        - AttributeName: "user_type"
+          AttributeType: "S"
       KeySchema:
         - AttributeName: "email"
           KeyType: "HASH"
+        - AttributeName: "user_type"
+          KeyType: "RANGE"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+
   FeedbackDalVacationDynamoTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -485,12 +521,24 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "room_id"
           AttributeType: "S"
+        - AttributeName: "agent_email"
+          AttributeType: "S"  # Add this line for the new GSI attribute
       KeySchema:
         - AttributeName: "room_id"
           KeyType: "HASH"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+      GlobalSecondaryIndexes:
+        - IndexName: "agent_email_index"
+          KeySchema:
+            - AttributeName: "agent_email"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "ALL"  # Adjust projection type as needed
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
 
   CustomerBookingsTable:
     Type: "AWS::DynamoDB::Table"
@@ -499,12 +547,24 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "booking_reference_code"
           AttributeType: "S"
+        - AttributeName: "room_id"
+          AttributeType: "N"  # Add this line for the new GSI attribute
       KeySchema:
         - AttributeName: "booking_reference_code"
           KeyType: "HASH"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+      GlobalSecondaryIndexes:
+        - IndexName: "room_id_index"
+          KeySchema:
+            - AttributeName: "room_id"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "ALL"  # Adjust projection type as needed
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
         
   NavigateWebsiteTable:
     Type: "AWS::DynamoDB::Table"

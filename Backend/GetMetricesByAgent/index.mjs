@@ -5,10 +5,10 @@ const ddbClient = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocumentClient.from(ddbClient);
 
 export const handler = async (event) => {
-    const { agentEmail } = event
+    const { agentEmail } = event;
     const roomsTableName = process.env.RoomsDalVacationDynamoTableName;
     const usersTableName = process.env.UserDalVacationDynamoTableName;
-    const bookingsTableName = process.env.BookingsDalVacationDynamoTableName;
+    const gcpSqlDumpLambdaName = process.env.AddLookerStudioDataToGcpSqlLambdaName;
 
     if (!agentEmail) {
         return {
@@ -20,20 +20,48 @@ export const handler = async (event) => {
     try {
         const [roomsCount, usersCount, totalEarnings] = await Promise.all([
             getRoomsCount(agentEmail, roomsTableName),
-            getCustomerUsersCount(usersTableName),
-            getTotalEarningsForAgent(agentEmail, bookingsTableName)
+            getCustomerUsersCount(usersTableName)
         ]);
 
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify({
+        // const response = {
+        //     statusCode: 200,
+        //     body: JSON.stringify({
+        //         totalRooms: roomsCount,
+        //         totalUsers: usersCount
+        //     }),
+        // };
+
+        // return response;
+
+        // Prepare the payload for the generalized Lambda function
+        const payload = {
+            tableName: 'metrics', // Change to the desired table name
+            data: {
                 totalRooms: roomsCount,
-                totalUsers: usersCount,
-                totalEarnings: totalEarnings,
-            }),
+                totalUsers: usersCount
+            }
         };
 
-        return response;
+        // Invoke the generalized Lambda function
+        const invokeParams = {
+            FunctionName: gcpSqlDumpLambdaName,
+            Payload: JSON.stringify(payload),
+        };
+
+        const invokeResponse = await lambdaClient.send(new InvokeCommand(invokeParams));
+        const responsePayload = JSON.parse(new TextDecoder('utf-8').decode(invokeResponse.Payload));
+
+        if (invokeResponse.StatusCode === 200) {
+            return {
+                statusCode: 200,
+                body: JSON.stringify({ message: 'Data successfully written to GCP MySQL', response: responsePayload }),
+            };
+        } else {
+            return {
+                statusCode: 500,
+                body: JSON.stringify({ message: 'Failed to write data to GCP MySQL', response: responsePayload }),
+            };
+        }
     } catch (error) {
         console.error('Error calculating data:', error);
 
@@ -52,7 +80,7 @@ export const handler = async (event) => {
 const getRoomsCount = async (agentEmail, roomsTableName) => {
     const params = {
         TableName: roomsTableName,
-        IndexName: 'agent_email',
+        IndexName: 'agent_email_index', // Ensure this index exists
         KeyConditionExpression: 'agent_email = :agentEmail',
         ExpressionAttributeValues: {
             ':agentEmail': agentEmail,
@@ -60,7 +88,9 @@ const getRoomsCount = async (agentEmail, roomsTableName) => {
         Select: 'COUNT',
     };
 
+    console.log(`getRoomsCount Params: ${JSON.stringify(params)}`);
     const data = await ddbDocClient.send(new QueryCommand(params));
+    console.log(`getRoomsCount Data: ${JSON.stringify(data)}`);
     return data.Count;
 };
 
@@ -74,50 +104,11 @@ const getCustomerUsersCount = async (usersTableName) => {
         },
         Select: 'COUNT',
     };
-
+    console.log(`getCustomerUsersCount Params: ${JSON.stringify(params)}`);
     const data = await ddbDocClient.send(new ScanCommand(params));
     return data.Count;
 };
 
-// Function to calculate the total earnings for rooms associated with a specific agent_email
-const getTotalEarningsForAgent = async (agentEmail, bookingsTableName) => {
-    let totalEarnings = 0;
-    let lastEvaluatedKey = null;
 
-    // Query to get room_ids for the agent
-    const roomsParams = {
-        TableName: bookingsTableName,
-        IndexName: 'agent_email', // Ensure this index exists or replace with correct index if using a different one
-        KeyConditionExpression: 'agent_email = :agentEmail',
-        ExpressionAttributeValues: {
-            ':agentEmail': agentEmail,
-        },
-        ProjectionExpression: 'room_id',
-    };
-
-    const roomsData = await ddbDocClient.send(new QueryCommand(roomsParams));
-    const roomIds = roomsData.Items.map(item => item.room_id);
-
-    // Scan the bookings table for the total earnings
-    do {
-        const bookingsParams = {
-            TableName: 'BookingsTable',
-            FilterExpression: 'room_id IN (:roomIds)',
-            ExpressionAttributeValues: {
-                ':roomIds': roomIds,
-            },
-            ProjectionExpression: 'total_amount',
-            ExclusiveStartKey: lastEvaluatedKey,
-        };
-
-        const bookingsData = await ddbDocClient.send(new ScanCommand(bookingsParams));
-
-        bookingsData.Items.forEach(item => {
-            totalEarnings += item.total_amount;
-        });
-
-        lastEvaluatedKey = bookingsData.LastEvaluatedKey;
-    } while (lastEvaluatedKey);
-
-    return totalEarnings;
-};
+  
+  
