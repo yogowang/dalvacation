@@ -432,10 +432,10 @@ Resources:
     Properties:
       DisplayName: DalVacationHomeSnsTopic
 
-  AddLookerStudioDataToGcpSql:
+  LambdaAddLookerStudioDataToGcpSql:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: "AddLookerStudioDataToGcpSql"
+      FunctionName: "LambdaAddLookerStudioDataToGcpSql"
       Runtime: "nodejs20.x"
       Role: "arn:aws:iam::160536684166:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
@@ -443,7 +443,7 @@ Resources:
       MemorySize: 512
       Code:
         S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
-        S3Key: "AddLookerStudioDataToGcpSql.zip"
+        S3Key: "LambdaAddLookerStudioDataToGcpSql.zip"
 
   GetBookingsByAgent:
     Type: AWS::Lambda::Function
@@ -458,7 +458,7 @@ Resources:
         Variables:
           BookingsDalVacationDynamoTableName: !Ref CustomerBookingsTable
           RoomsDalVacationDynamoTableName: !Ref RoomsTable
-          AddLookerStudioDataToGcpSqlLambdaName: !Ref AddLookerStudioDataToGcpSql
+          AddLookerStudioDataToGcpSqlLambdaName: !Ref LambdaAddLookerStudioDataToGcpSql
       Code:
         S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "GetBookingsByAgent.zip"
@@ -476,7 +476,7 @@ Resources:
         Variables:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
           RoomsDalVacationDynamoTableName: !Ref RoomsTable
-          AddLookerStudioDataToGcpSqlLambdaName: !Ref AddLookerStudioDataToGcpSql
+          AddLookerStudioDataToGcpSqlLambdaName: !Ref LambdaAddLookerStudioDataToGcpSql
       Code:
         S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "GetMetricesByAgent.zip"

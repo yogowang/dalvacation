@@ -1,8 +1,10 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, ScanCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 
 const ddbClient = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocumentClient.from(ddbClient);
+const lambdaClient = new LambdaClient({});
 
 export const handler = async (event) => {
     const { agentEmail } = event;
@@ -23,16 +25,6 @@ export const handler = async (event) => {
             getCustomerUsersCount(usersTableName)
         ]);
 
-        // const response = {
-        //     statusCode: 200,
-        //     body: JSON.stringify({
-        //         totalRooms: roomsCount,
-        //         totalUsers: usersCount
-        //     }),
-        // };
-
-        // return response;
-
         // Prepare the payload for the generalized Lambda function
         const payload = {
             tableName: 'metrics', // Change to the desired table name
@@ -41,6 +33,7 @@ export const handler = async (event) => {
                 totalUsers: usersCount
             }
         };
+        console.log('payload:', JSON.stringify(payload));
 
         // Invoke the generalized Lambda function
         const invokeParams = {
@@ -108,7 +101,3 @@ const getCustomerUsersCount = async (usersTableName) => {
     const data = await ddbDocClient.send(new ScanCommand(params));
     return data.Count;
 };
-
-
-  
-  
