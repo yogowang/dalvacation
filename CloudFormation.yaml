@@ -7,7 +7,7 @@ Resources:
     Properties:
       FunctionName: "LambdaRegister"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -17,7 +17,7 @@ Resources:
           DalVacationHomeUserPoolId: !Ref UserPool
           DalVacationHomeAppClientId: !Ref UserPoolClient
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaRegister.zip"
 
   LambdaConfirmUser:
@@ -25,7 +25,7 @@ Resources:
     Properties:
       FunctionName: "LambdaConfirmUser"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -36,7 +36,7 @@ Resources:
           DalVacationHomeSnsTopicArn: !Ref DalVacationHomeSnsTopic
 
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaConfirmUser.zip"
 
   LambdaLogin1stFactor:
@@ -44,7 +44,7 @@ Resources:
     Properties:
       FunctionName: "LambdaLogin1stFactor"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -53,7 +53,7 @@ Resources:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
           DalVacationHomeAppClientId: !Ref UserPoolClient
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaLogin1stFactor.zip"
 
   LambdaLogin2ndFactor:
@@ -61,7 +61,7 @@ Resources:
     Properties:
       FunctionName: "LambdaLogin2ndFactor"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -69,7 +69,7 @@ Resources:
         Variables:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaLogin2ndFactor.zip"
 
   LambdaLogin3rdFactor:
@@ -77,7 +77,7 @@ Resources:
     Properties:
       FunctionName: "LambdaLogin3rdFactor"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -86,7 +86,7 @@ Resources:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
           LambdaSNSNotificationName: !Ref LambdaSNSNotification
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaLogin3rdFactor.zip"
 
   # Lambda Feedback
@@ -95,17 +95,18 @@ Resources:
     Properties:
       FunctionName: "LambdaAddFeedback"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Environment:
         Variables:
           FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable #replace token and api with your own
-          GOOGLE_API_ACCESS_TOKEN: "ya29.a0AXooCgu-MPXuklwR_eFw709pYqyHfSYNxkk7wxbBUGxqj_HuyX_eQLW7vH6f6soaGmrCR6sS0T3hqcVqmTCYoIt_K0Rq3-K7OGlnF534vub2PZ0ND83oZWdxYuW3wEupCspgAdzixBhlKi-lMYJK8pMAdaTsCY8KTgzkv8yfvey05IYiuXO_YQhkooEzZdixcRRUKa_cyEXvc18IrVBjyaDtkIbssDJKPSB8iM-j8v1bc8uyal1Dl_HObKRWWhZnGRDtRXAAf8EL8ENuUxBSwk6rLrZ1bsRPOoTgy49FzhkIm8nDE1jhQ0oovK8uz4jzHveswvL4ac5RhTrWyHZyC4ZmyBmpW9un-4JKa_AGWU-YSn6goJtrN3E4MoHttnM_EpNLfS7KlBaBidaGbYW4R5Q6Yu9zp7EzaCgYKAUcSARMSFQHGX2MiAtvehHZfXrSMXXIMdlp2RQ0423"
+          GOOGLE_API_ACCESS_TOKEN: "ya29.a0AXooCgv9_suSQ1-9IpkPjhPtTwY_lQdJVewJHs_5dIDDl8gwLwLOlbivVUfwouPzRKdntUyzNCLPQlDoTwX3i1bqR3F1Sr2K7w02f9zMVOl4n21DHHDw3NAEmjL3CNohiR1Blgh3a4q_8lcKd1zOMuMhEAHs_SAGsx006Sj2PPC-G7x8H7C25qemVrKkrJX3Ru2_-RnqCRK23yoigvaPhSsNZ-X719Pk-zJoeXxFWYdFrs1mVpjVy08RKOv3VFrZ9GtnutYeZcxJdyiiCaLdnu0VkK2xHqgwu-V4e7NYfvOZ0BdRC3uIRCWcKUTRKCMHcgXUgRHWXRpEEsC9i-G94ogw0pJZBDV9-DiFQesy9eb1jDq0yhc5vPwCPNSWhiEce1gwOylYpzTyQH-aU6Y72PvHOC6ePvnmigaCgYKAWcSARMSFQHGX2MiIupnRKp1WDH_gUiU5MhMQw0425"
           API_ENDPOINT: "https://us-central1-aiplatform.googleapis.com/v1/projects/csci-5410-serverless-428001/locations/us-central1/publishers/google/models/gemini-1.5-flash-001:streamGenerateContent"
+          GSIName: "room_id_index"
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "AddFeedback.zip"
 
   LambdaReturnAllFeedback:
@@ -113,7 +114,7 @@ Resources:
     Properties:
       FunctionName: "LambdaReturnAllFeedback"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -121,7 +122,7 @@ Resources:
         Variables:
           FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "ReturnAllFeedback.zip"
 
   LambdaGetFeedbackByRoomId:
@@ -129,7 +130,7 @@ Resources:
     Properties:
       FunctionName: "LambdaGetFeedbackByRoomId"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -137,7 +138,7 @@ Resources:
         Variables:
           FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "GetFeedbackByRoomId.zip"
 
   LambdaDeleteFeedbackById:
@@ -145,7 +146,7 @@ Resources:
     Properties:
       FunctionName: "LambdaDeleteFeedbackById"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -153,21 +154,36 @@ Resources:
         Variables:
           FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "DeleteFeedbackById.zip"
-
+  LambdaGetFeedbackByAgent:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "LambdaGetFeedbackByAgent"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 120
+      MemorySize: 512
+      Environment:
+        Variables:
+          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable
+          RoomsDalVacationDynamoTableName: !Ref RoomsTable
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
+        S3Key: "GetFeedbackByAgent.zip"
   # Lambda - Booking
   LambdaGetAllRoomDetails:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: "LambdaGetAllRoomDetails"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaGetAllRoomDetails.zip"
       Environment:
         Variables:
@@ -178,12 +194,12 @@ Resources:
     Properties:
       FunctionName: "LambdaGetRoomDetailsByRoomId"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaGetRoomDetailsByRoomId.zip"
       Environment:
         Variables:
@@ -194,12 +210,12 @@ Resources:
     Properties:
       FunctionName: "LambdaAddRoomDetails"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaAddRoomDetails.zip"
       Environment:
         Variables:
@@ -210,12 +226,12 @@ Resources:
     Properties:
       FunctionName: "LambdaUpdateRoomDetails"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaUpdateRoomDetails.zip"
       Environment:
         Variables:
@@ -226,12 +242,12 @@ Resources:
     Properties:
       FunctionName: "LambdaDeleteRoomDetails"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaDeleteRoomDetails.zip"
       Environment:
         Variables:
@@ -242,12 +258,12 @@ Resources:
     Properties:
       FunctionName: "AddCustomerBooking"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "AddCustomerBooking.zip"
       Environment:
         Variables:
@@ -258,12 +274,12 @@ Resources:
     Properties:
       FunctionName: "ApproveRoomBooking"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "ApproveRoomBooking.zip"
       Environment:
         Variables:
@@ -276,7 +292,7 @@ Resources:
     Properties:
       FunctionName: "LambdaUserCount"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -284,7 +300,7 @@ Resources:
         Variables:
           UserDalVacationDynamoTableName: !Ref UserDalVacationDynamoTable
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "UserCount.zip"
   LambdaGetIncomeByAgent:
     Type: AWS::Lambda::Function
@@ -308,12 +324,12 @@ Resources:
     Properties:
       FunctionName: "LambdaVirtualAssistant"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "LambdaVirtualAssistant.zip"
 
   #S3
@@ -347,12 +363,12 @@ Resources:
     Properties:
       FunctionName: "customer-concern-subscriber"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "customer-concern-subscriber.zip"
       Environment:
         Variables:
@@ -369,12 +385,12 @@ Resources:
     Properties:
       FunctionName: "handle-concern-communication"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "handle-concern-communication.zip"
       Environment:
         Variables:
@@ -385,12 +401,12 @@ Resources:
     Properties:
       FunctionName: "get-all-concerns"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "get-all-concerns.zip"
       Environment:
         Variables:
@@ -401,12 +417,12 @@ Resources:
     Properties:
       FunctionName: "get-concern-chat"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
       Code:
-        S3Bucket: "dalvacationhome-backend" #replace it with your own S3bucket
+        S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "get-concern-chat.zip"
       Environment:
         Variables:
@@ -433,7 +449,7 @@ Resources:
     Properties:
       FunctionName: "LambdaSNSNotification"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::909715103412:role/LabRole" # Replace with your own LabRole ARN
+      Role: "arn:aws:iam::082497693506:role/LabRole" # Replace with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -441,7 +457,7 @@ Resources:
         Variables:
           DalVacationHomeSnsTopicArn: !Ref DalVacationHomeSnsTopic
       Code:
-        S3Bucket: "dalvacationhome-backend"
+        S3Bucket: "dalvacation-lambda-bucket-yuci"
         S3Key: "LambdaSNSNotification.zip"
 
   DalVacationHomeSnsTopic:
@@ -470,12 +486,24 @@ Resources:
       AttributeDefinitions:
         - AttributeName: "feedback_id"
           AttributeType: "S"
+        - AttributeName: "room_id"
+          AttributeType: "S"
       KeySchema:
         - AttributeName: "feedback_id"
           KeyType: "HASH"
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
+      GlobalSecondaryIndexes:
+        - IndexName: "room_id_index"
+          KeySchema:
+            - AttributeName: "room_id"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
 
   RoomsTable:
     Type: "AWS::DynamoDB::Table"
@@ -626,6 +654,12 @@ Resources:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt FeedbackApiResource.ResourceId
       PathPart: "DeleteFeedbackById"
+  GetFeedbackByAgentApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ParentId: !GetAtt FeedbackApiResource.ResourceId
+      PathPart: "GetFeedbackByAgent"
 
   # Authentication API Resource
   UserAuthenticationApiAuthenticationResource:
@@ -788,7 +822,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaRegister.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -818,7 +852,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaConfirmUser.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -848,7 +882,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaLogin1stFactor.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -878,7 +912,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaLogin2ndFactor.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -908,7 +942,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaLogin3rdFactor.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -938,7 +972,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaAddFeedback.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -968,7 +1002,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaReturnAllFeedback.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -998,7 +1032,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetFeedbackByRoomId.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1028,7 +1062,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaDeleteFeedbackById.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1058,7 +1092,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetAllRoomDetails.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1088,7 +1122,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetRoomDetailsByRoomId.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1118,7 +1152,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaAddRoomDetails.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1148,7 +1182,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaUpdateRoomDetails.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1178,7 +1212,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaDeleteRoomDetails.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1208,7 +1242,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${AddCustomerBooking.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1238,7 +1272,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaUserCount.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1268,7 +1302,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${HandleConcernCommunication.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1298,7 +1332,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetAllConcerns.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1328,7 +1362,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetConcernChat.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1358,7 +1392,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaVirtualAssistant.Arn}/invocations"
-        Credentials: "arn:aws:iam::909715103412:role/LabRole"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1387,6 +1421,36 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetIncomeByAgent.Arn}/invocations"
+        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        RequestTemplates:
+          application/json: ""
+        IntegrationResponses:
+          - StatusCode: "200"
+            ResponseTemplates:
+              application/json: ""
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+  
+  GetFeedbackByAgentMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref DalVacationHomeApiGateway
+      ResourceId: !Ref GetFeedbackByAgentApiResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      MethodResponses:
+        - StatusCode: 200
+          ResponseModels:
+            application/json: "Empty"
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+      RequestParameters: {}
+      RequestModels: {}
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS
+        Uri:
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetFeedbackByAgent.Arn}/invocations"
         Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
@@ -1428,5 +1492,6 @@ Resources:
       - GetConcernChatMethod
       - VirtualAssistantMethod
       - GetIncomeByAgentMethod
+      - GetFeedbackByAgentMethod
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
