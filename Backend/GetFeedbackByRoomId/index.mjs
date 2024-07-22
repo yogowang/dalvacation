@@ -1,6 +1,7 @@
 //https://stackoverflow.com/questions/64053683/aws-dynamodb-query-with-nodejs
 //https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/dynamodb-example-query-scan.html
 //https://medium.com/@abir71.hosen/aws-dynamodb-query-vs-scan-306522b0f259
+//https://stackoverflow.com/questions/33847477/querying-a-global-secondary-index-in-dynamodb-local
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
 
@@ -8,6 +9,7 @@ const client = new DynamoDBClient({});
 const dynamodb = DynamoDBDocumentClient.from(client);
 
 const tableName = process.env.FeedbackDalVacationDynamoTableName;
+const GSIName=process.env.GSIName;
 
 export const handler = async (event) => {
   console.log(event)
