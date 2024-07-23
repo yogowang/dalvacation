@@ -77,7 +77,9 @@ const getBookingsForAgent = async (agentEmail, roomsTableName, bookingsTableName
     };
 
     const roomData = await ddbDocClient.send(new QueryCommand(roomParams));
+    console.log('roomData:', JSON.stringify(roomData));
     const roomIds = roomData.Items.map(item => item.room_id);
+    console.log('roomIds:', JSON.stringify(roomIds));
 
     if (roomIds.length === 0) {
         return []; // No rooms found for the given agent_email
@@ -88,7 +90,7 @@ const getBookingsForAgent = async (agentEmail, roomsTableName, bookingsTableName
     // Build the FilterExpression dynamically
     const filterExpression = roomIds.map((_, index) => `room_id = :roomId${index}`).join(' OR ');
     const expressionAttributeValues = roomIds.reduce((acc, roomId, index) => {
-        acc[`:roomId${index}`] = roomId;
+        acc[`:roomId${index}`] = Number(roomId);
         return acc;
     }, {});
 
