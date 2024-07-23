@@ -23,9 +23,9 @@ export const handler = async (event) => {
     const { agentEmail } = event;
     console.log('Agent email:', agentEmail);
 
-    const roomsTableName = "Rooms";
-    const feedbackTableName = "FeedbackDalVacation";
-    const gcpSqlDumpLambdaName = "hawa";
+    const roomsTableName = process.env.RoomsDalVacationDynamoTableName;
+    const feedbackTableName = process.env.FeedbackDalVacationDynamoTableName;
+    const gcpSqlDumpLambdaName = process.env.AddLookerStudioDataToGcpSqlLambdaName;
 
     if (!agentEmail) {
         console.log('Missing agentEmail query parameter');
