@@ -24,7 +24,7 @@ const caesarCipherDecrypt = (str, key) => {
 };
 
 export const handler = async (event) => {
-  const { email, word, decryptedWord } = event;
+  const { email, word, decryptedWord, user_type } = event;
   let responseBody = "";
   let statusCode = 0;
   const tableName = process.env.UserDalVacationDynamoTableName;
@@ -35,6 +35,7 @@ export const handler = async (event) => {
         TableName: tableName,
         Key: {
           email: email,
+          user_type: user_type
         },
       })
     );
@@ -54,9 +55,9 @@ export const handler = async (event) => {
 
         // Construct parameters for invoking Notification Lambda function
         const params = {
-          FunctionName: snsNotificationLambdaName, 
+          FunctionName: snsNotificationLambdaName,
           InvocationType: 'Event', // Asynchronous invocation
-          Payload: JSON.stringify({ email: email, message: message, subject: subject }) 
+          Payload: JSON.stringify({ email: email, message: message, subject: subject })
         };
         // Invoke Success Login Notification
         await lambdaClient.send(new InvokeCommand(params));
