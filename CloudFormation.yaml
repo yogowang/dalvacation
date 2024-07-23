@@ -546,7 +546,7 @@ Resources:
         - AttributeName: "feedback_id"
           AttributeType: "S"
         - AttributeName: "room_id"
-          AttributeType: "S"
+          AttributeType: "N"
       KeySchema:
         - AttributeName: "feedback_id"
           KeyType: "HASH"
