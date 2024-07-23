@@ -39,6 +39,7 @@ const RoomDetailsPage = () => {
 
     const getFeedback = async () => {
         const response = await axios.post(getFeedbackByRoomIdUrl, feedbackData);
+        console.log(response.data.body);
         setFeedbackList(response.data.body);
     };
 
@@ -124,7 +125,7 @@ const RoomDetailsPage = () => {
                             </div>
                         </div>
                         <div>
-                            {userType !== "Property Agent" && (
+                            {userType !== "Property_Agent" && (
                                 <div className="mt-5">
                                     <h2 className="text-2xl font-bold mb-2">Book Room</h2>
                                     <div className="w-full">
@@ -184,7 +185,7 @@ const RoomDetailsPage = () => {
                                     <tr key={index} className="bg-gray-100 border border-gray-300 md:border-none block md:table-row">
                                         <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">{feedback.date}</td>
                                         <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">{feedback.email || 'N/A'}</td>
-                                        <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">{feedback.room_id || 'N/A'}</td>
+                                        <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">{feedback.room_id_index || 'N/A'}</td>
                                         <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">{feedback.sentiment}</td>
                                         <td className="p-2 md:border md:border-gray-300 text-left block md:table-cell">{feedback.text}</td>
                                     </tr>

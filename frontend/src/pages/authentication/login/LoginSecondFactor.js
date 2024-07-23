@@ -7,6 +7,7 @@ import axios from "axios";
 
 const LoginSecondFactor = () => {
     const navigate = useNavigate();
+    const user_type = localStorage.getItem("userType");
     const email = localStorage.getItem("email");
     const question = localStorage.getItem("question");
     const [answer, setAnswer] = useState();
@@ -17,7 +18,8 @@ const LoginSecondFactor = () => {
             const userData = {
                 email: email,
                 question: question,
-                answer: answer
+                answer: answer,
+                user_type: user_type.toLowerCase()
             };
 
             console.log("url: ", api_login_2_factor_url);
