@@ -156,6 +156,7 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "DeleteFeedbackById.zip"
+
   LambdaGetFeedbackByAgent:
     Type: AWS::Lambda::Function
     Properties:
@@ -172,6 +173,7 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "GetFeedbackByAgent.zip"
+
   # Lambda - Booking
   LambdaGetAllRoomDetails:
     Type: AWS::Lambda::Function
@@ -302,12 +304,13 @@ Resources:
       Code:
         S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "UserCount.zip"
+
   LambdaGetIncomeByAgent:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: "LambdaGetIncomeByAgent"
       Runtime: "nodejs20.x"
-      Role: "arn:aws:iam::082497693506:role/LabRole" #replace it with your own LabRole ARN
+      Role: "arn:aws:iam::160536684166:role/LabRole" #replace it with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -465,6 +468,7 @@ Resources:
     Properties:
       DisplayName: DalVacationHomeSnsTopic
 
+  # CommonLambda for LookerStudio DataSource
   LambdaAddLookerStudioDataToGcpSql:
     Type: AWS::Lambda::Function
     Properties:
@@ -1479,7 +1483,6 @@ Resources:
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaVirtualAssistant.Arn}/invocations"
         Credentials: "arn:aws:iam::160536684166:role/LabRole"
-        Credentials: "arn:aws:iam::082497693506:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1508,7 +1511,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetIncomeByAgent.Arn}/invocations"
-        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        Credentials: "arn:aws:iam::160536684166:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
@@ -1538,7 +1541,7 @@ Resources:
         Type: AWS
         Uri:
           Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaGetFeedbackByAgent.Arn}/invocations"
-        Credentials: "arn:aws:iam::082497693506:role/LabRole"
+        Credentials: "arn:aws:iam::160536684166:role/LabRole"
         RequestTemplates:
           application/json: ""
         IntegrationResponses:
