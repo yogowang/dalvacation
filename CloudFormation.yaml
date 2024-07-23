@@ -1,5 +1,7 @@
 AWSTemplateFormatVersion: 2010-09-09
+
 Description: Iac for Dal Vacation Home
+
 Resources:
   # Lambda - Authentication
   LambdaRegister:
@@ -519,6 +521,24 @@ Resources:
         S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
         S3Key: "GetMetricesByAgent.zip"
 
+  ReloadLookerStudioData:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: "ReloadLookerStudioData"
+      Runtime: "nodejs20.x"
+      Role: "arn:aws:iam::160536684166:role/LabRole" #replace it with your own LabRole ARN
+      Handler: "index.handler"
+      Timeout: 900
+      MemorySize: 512
+      Environment:
+        Variables:
+          GetFeedbackByAgentLambdaName: !Ref GetBookingsByAgent
+          GetBookingsByAgentLambdaName: !Ref GetMetricesByAgent
+          GetMetricesByAgentLambdaName: !Ref LambdaGetFeedbackByAgent
+      Code:
+        S3Bucket: "dalvacation-lambda-bucket" #replace it with your own S3bucket
+        S3Key: "ReloadLookerStudioData.zip"
+
   #Dynamo DB
   UserDalVacationDynamoTable:
     Type: AWS::DynamoDB::Table
@@ -883,13 +903,13 @@ Resources:
       ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
       PathPart: "virtual-assistant"
 
-  # GCP Looker studio Data Scource API resource
-  GCPLookerStudioDataScourceApiResource:
+  # Reload Looker studio Data API resource
+  ReloadLookerStudioDataApiResource:
     Type: AWS::ApiGateway::Resource
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
       ParentId: !GetAtt DalVacationHomeApiGateway.RootResourceId
-      PathPart: "gcp-lookerstudio-datasource"
+      PathPart: "reload-lookerstudio-data"
 
   # API GATEWAY - Methods
   # Authentication API Methods
@@ -1492,6 +1512,7 @@ Resources:
               application/json: ""
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+
   GetIncomeByAgentMethod:
     Type: AWS::ApiGateway::Method
     Properties:
@@ -1551,11 +1572,12 @@ Resources:
               application/json: ""
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
-  GCPLookerStudioDataMethod:
+
+  ReloadLookerStudioDataMethod:
     Type: AWS::ApiGateway::Method
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
-      ResourceId: !Ref GCPLookerStudioDataScourceApiResource
+      ResourceId: !Ref ReloadLookerStudioDataApiResource
       HttpMethod: POST
       AuthorizationType: NONE
       MethodResponses:
@@ -1570,7 +1592,7 @@ Resources:
         IntegrationHttpMethod: POST
         Type: AWS
         Uri:
-          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GCPLookerStudioDataSource.Arn}/invocations"
+          Fn::Sub: "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ReloadLookerStudioData.Arn}/invocations"
         Credentials: "arn:aws:iam::160536684166:role/LabRole"
         RequestTemplates:
           application/json: ""
@@ -1613,5 +1635,6 @@ Resources:
       - VirtualAssistantMethod
       - GetIncomeByAgentMethod
       - GetFeedbackByAgentMethod
+      - ReloadLookerStudioDataMethod
     Properties:
       RestApiId: !Ref DalVacationHomeApiGateway
