@@ -31,7 +31,7 @@ export const ConcernIndex = () => {
 
     return (
         <div className="container mx-auto px-5 py-5 mt-20">
-            {user_type && user_type === 'customer' &&
+            {user_type && user_type === 'Customer' &&
                 <div className="flex justify-end mb-4">
                     <button className="p-2 bg-blue-500 text-white rounded" onClick={handleOpen}>
                         Raise Concern
