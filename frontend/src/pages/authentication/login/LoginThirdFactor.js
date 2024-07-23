@@ -9,6 +9,7 @@ const randomWord = generateRandomWord();
 const LoginThirdFactor = () => {
     const navigate = useNavigate();
     const email = localStorage.getItem("email");
+    const user_type = localStorage.getItem("userType");
     const [decryptedWord, setDecryptedWord] = useState();
 
     const callThirdFactorAuth = async () => {
@@ -16,6 +17,7 @@ const LoginThirdFactor = () => {
             const api_login_3_factor_url = `${process.env.REACT_APP_BACKEND_URL}/authentication/login/3rd`
             const userData = {
                 email: email,
+                user_type: user_type.toLowerCase(),
                 word: randomWord,
                 decryptedWord: decryptedWord
             };

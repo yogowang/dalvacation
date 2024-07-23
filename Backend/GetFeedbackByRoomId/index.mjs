@@ -9,7 +9,7 @@ const client = new DynamoDBClient({});
 const dynamodb = DynamoDBDocumentClient.from(client);
 
 const tableName = process.env.FeedbackDalVacationDynamoTableName;
-const GSIName=process.env.GSIName;
+const GSIName = process.env.GSIName;
 
 export const handler = async (event) => {
   console.log(event)
@@ -18,7 +18,7 @@ export const handler = async (event) => {
   try {
     const params = {
       TableName: tableName,
-      FilterExpression: "room_id = :room_id",
+      FilterExpression: "room_id_index = :room_id",
       ExpressionAttributeValues: {
         ":room_id": room_id
       }

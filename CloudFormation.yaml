@@ -6,12 +6,12 @@ Description: Iac for Dal Vacation Home
 Parameters:
   LabRoleArn:
     Type: String
-    Default: arn:aws:iam::160536684166:role/LabRole
+    Default: arn:aws:iam::909715103412:role/LabRole
     Description: The ARN of the LabRole to be used.
 
   LambdaS3Bucket:
     Type: String
-    Default: dalvacation-lambda-bucket
+    Default: dalvacationhome-backend
     Description: The name of the S3 bucket in wich lambda's are stored
 
 Resources:
@@ -39,7 +39,7 @@ Resources:
     Properties:
       FunctionName: "LambdaConfirmUser"
       Runtime: "nodejs20.x"
-      Role: !Ref LabRoleArn 
+      Role: !Ref LabRoleArn
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -467,7 +467,7 @@ Resources:
     Properties:
       FunctionName: "LambdaSNSNotification"
       Runtime: "nodejs20.x"
-      Role: !Ref LabRoleArn  # Replace with your own LabRole ARN
+      Role: !Ref LabRoleArn # Replace with your own LabRole ARN
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -604,7 +604,7 @@ Resources:
         - AttributeName: "room_id"
           AttributeType: "S"
         - AttributeName: "agent_email"
-          AttributeType: "S"  # Add this line for the new GSI attribute
+          AttributeType: "S" # Add this line for the new GSI attribute
       KeySchema:
         - AttributeName: "room_id"
           KeyType: "HASH"
@@ -617,7 +617,7 @@ Resources:
             - AttributeName: "agent_email"
               KeyType: "HASH"
           Projection:
-            ProjectionType: "ALL"  # Adjust projection type as needed
+            ProjectionType: "ALL" # Adjust projection type as needed
           ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
@@ -630,7 +630,7 @@ Resources:
         - AttributeName: "booking_reference_code"
           AttributeType: "S"
         - AttributeName: "room_id"
-          AttributeType: "N"  # Add this line for the new GSI attribute
+          AttributeType: "N" # Add this line for the new GSI attribute
       KeySchema:
         - AttributeName: "booking_reference_code"
           KeyType: "HASH"
@@ -643,11 +643,11 @@ Resources:
             - AttributeName: "room_id"
               KeyType: "HASH"
           Projection:
-            ProjectionType: "ALL"  # Adjust projection type as needed
+            ProjectionType: "ALL" # Adjust projection type as needed
           ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
-        
+
   NavigateWebsiteTable:
     Type: "AWS::DynamoDB::Table"
     Properties:
@@ -1554,7 +1554,7 @@ Resources:
               application/json: ""
             ResponseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
-  
+
   GetFeedbackByAgentMethod:
     Type: AWS::ApiGateway::Method
     Properties:

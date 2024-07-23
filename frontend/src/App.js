@@ -16,6 +16,7 @@ import Home from './pages/home/Home';
 import ChatBot from './components/chatbot/ChatBot';
 import RoomDetailsPage from './pages/room-details/RoomDetailsPage/RoomDetailsPage';
 import { ConcernIndex } from './pages/concern/ConcernIndex';
+import Dashboard from './pages/property_agent/Dashboard';
 
 function App() {
   return (
@@ -36,6 +37,8 @@ function App() {
           <Route path="/update-room-details/:room_id" element={<UpdateRoomDetails />} />
           <Route path="/room-details/:id" element={<RoomDetailsPage />} />
           <Route path="/concerns" element={<ConcernIndex />} />
+          <Route path='/property-agent-dashboard' element={<Dashboard />} />
+
         </Routes>
         <Footer />
         <ChatBot />

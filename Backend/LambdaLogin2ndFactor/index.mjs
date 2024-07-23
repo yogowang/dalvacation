@@ -5,7 +5,7 @@ const ddbClient = new DynamoDBClient({});
 const dynamo = DynamoDBDocumentClient.from(ddbClient);
 
 export const handler = async (event) => {
-  const { email, answer } = event;
+  const { email, answer, user_type } = event;
   let responseBody = "";
   let statusCode = 0;
   const tableName = process.env.UserDalVacationDynamoTableName;
@@ -15,7 +15,8 @@ export const handler = async (event) => {
       new GetCommand({
         TableName: tableName,
         Key: {
-          email: email
+          email: email,
+          user_type: user_type
         },
       })
     );

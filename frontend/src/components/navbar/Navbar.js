@@ -8,13 +8,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = () => {
-  // const [dropDownMenu, setDropDownMenu] = useState(false);
+  const userType = localStorage.getItem("userType")
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
   let Links = [
     {
       name: "ROOMS",
       link: "/room-details",
+    },
+    {
+      name: userType === "Property_Agent" ? "SOLVE CONCERN" : "RAISE CONCERN",
+      link: userType === "Property_Agent" ? "/concerns" : "/concerns"
     }
   ];
   const handleLogout = () => {
