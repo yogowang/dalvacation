@@ -354,7 +354,7 @@ Resources:
   HotelRoomImagesBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: "hotel-room-images-zeel"
+      BucketName: "hotel-room-images"
       PublicAccessBlockConfiguration:
         BlockPublicAcls: true
         BlockPublicPolicy: false
@@ -373,7 +373,7 @@ Resources:
               - s3:GetObject
               - s3:PutObject
             Effect: Allow
-            Resource: !Sub arn:aws:s3:::hotel-room-images-zeel/*
+            Resource: !Sub arn:aws:s3:::hotel-room-images/*
             Principal: "*"
 
   CustomerConcernSubscriber:
