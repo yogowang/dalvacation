@@ -170,6 +170,7 @@ Resources:
         Variables:
           FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable
           RoomsDalVacationDynamoTableName: !Ref RoomsTable
+          AddLookerStudioDataToGcpSqlLambdaName: !Ref LambdaAddLookerStudioDataToGcpSql
       Code:
         S3Bucket: "dalvacation-lambda-bucket-yuci" #replace it with your own S3bucket
         S3Key: "GetFeedbackByAgent.zip"
