@@ -42,7 +42,8 @@ export const handler = async (event) => {
       new GetCommand({
         TableName: tableName,
         Key: {
-          email: email, // Assuming email as the unique identifier
+          email: email, 
+          user_type: user_type,
         },
       })
     );

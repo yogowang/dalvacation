@@ -12,7 +12,7 @@ export const handler = async (event) => {
   try {
     const scanParams_room = {
       TableName: tableNameRooms,
-      ProjectionExpression: 'room_id, agent_id'
+      ProjectionExpression: 'room_id, agent_email'
     };
     const data_rooms = await dynamodb.send(new ScanCommand(scanParams_room));
     const scanParams_booking = {
@@ -29,10 +29,10 @@ export const handler = async (event) => {
         return pv;
     }, {});
     const income_by_agent = data_rooms.Items.reduce(function(pv, cv) {
-        if ( pv[cv.agent_id] ) {
-            pv[cv.agent_id] += income_by_room[cv.room_id];
+        if ( pv[cv.agent_email] ) {
+            pv[cv.agent_email] += income_by_room[cv.room_id];
         } else {
-            pv[cv.agent_id] = income_by_room[cv.room_id];
+            pv[cv.agent_email] = income_by_room[cv.room_id];
         }
         return pv;
     }, {});
