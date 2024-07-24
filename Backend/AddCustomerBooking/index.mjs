@@ -20,7 +20,7 @@ export const handler = async (event) => {
       Item: {
         booking_reference_code,
         customer_email,
-        room_id,
+        room_id_index:room_id,
         start_date,
         end_date,
         total_days,

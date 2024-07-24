@@ -88,9 +88,9 @@ const getBookingsForAgent = async (agentEmail, roomsTableName, bookingsTableName
     // Step 2: Query the bookings table using room_ids
     // Since DynamoDB does not support IN for ScanCommand, use a FilterExpression to match room_ids
     // Build the FilterExpression dynamically
-    const filterExpression = roomIds.map((_, index) => `room_id = :roomId${index}`).join(' OR ');
+    const filterExpression = roomIds.map((_, index) => `room_id_index = :roomId${index}`).join(' OR ');
     const expressionAttributeValues = roomIds.reduce((acc, roomId, index) => {
-        acc[`:roomId${index}`] = Number(roomId);
+        acc[`:roomId${index}`] = roomId;
         return acc;
     }, {});
 

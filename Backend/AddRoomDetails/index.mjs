@@ -7,8 +7,8 @@ const dynamodb = DynamoDBDocumentClient.from(client);
 
 const s3 = new S3Client({});
 
-const ROOMS_TABLE = 'Rooms';
-const BUCKET_NAME = "hotel-room-images";
+const ROOMS_TABLE = process.env.RoomsTableName;
+const BUCKET_NAME = process.env.HotelRoomImagesBucketName;
 
 export const handler = async (event) => {
   const { agent_email, room_number, room_type, price, features, file_content_base64, file_type } = event;

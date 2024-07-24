@@ -6,12 +6,12 @@ Description: Iac for Dal Vacation Home
 Parameters:
   LabRoleArn:
     Type: String
-    Default: arn:aws:iam::909715103412:role/LabRole
+    Default: arn:aws:iam::160536684166:role/LabRole
     Description: The ARN of the LabRole to be used.
 
   LambdaS3Bucket:
     Type: String
-    Default: dalvacationhome-backend
+    Default: dalvacation-lambda-bucket
     Description: The name of the S3 bucket in wich lambda's are stored
 
 Resources:
@@ -236,7 +236,8 @@ Resources:
         S3Key: "LambdaAddRoomDetails.zip"
       Environment:
         Variables:
-          TABLE_NAME: !Ref RoomsTable
+          RoomsTableName: !Ref RoomsTable
+          HotelRoomImagesBucketName: !Ref HotelRoomImagesBucket
 
   LambdaUpdateRoomDetails:
     Type: AWS::Lambda::Function

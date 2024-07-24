@@ -64,6 +64,16 @@ const Navbar = () => {
                 </a>
               </li>
             ))}
+            {userType === "Property_Agent" ? (
+              <li className="my-7 font-semibold md:my-0 md:ml-8">
+                <a
+                  href="/property-agent-dashboard"
+                  className="text-white duration-500 hover:text-yellow-500"
+                >
+                  DASHBOARD
+                </a>
+              </li>
+            ) : (<></>)}
 
             {email ? (
               <>
