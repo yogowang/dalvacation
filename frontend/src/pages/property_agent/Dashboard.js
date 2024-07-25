@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import axios from "axios";
+import { REACT_APP_BACKEND_URL } from "../../ApiUrl.js"
 
 const Dashboard = () => {
     const email = localStorage.getItem("email")
     const data = { "agentEmail": email }
-    const dashboardDataUrl = `${process.env.REACT_APP_BACKEND_URL}/reload-lookerstudio-data`
+    const dashboardDataUrl = `${REACT_APP_BACKEND_URL}/reload-lookerstudio-data`
     useEffect(() => {
         const getLookerStudioData = async () => {
             await axios.post(dashboardDataUrl, data);

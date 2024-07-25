@@ -3,6 +3,7 @@ import { RoomDetailsForm } from "../RoomDetailsForm/RoomDetailsForm";
 import { Typography } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { REACT_APP_BACKEND_URL } from "../../../ApiUrl.js"
 
 export const AddRoomDetails = () => {
     const agent_email = localStorage.getItem("email")
@@ -27,7 +28,7 @@ export const AddRoomDetails = () => {
         }
 
         console.log("data:", data);
-        const addRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}/booking/addroomdetails`;
+        const addRoomDetailsAPIURL = `${REACT_APP_BACKEND_URL}/booking/addroomdetails`;
         const response = await axios.post(addRoomDetailsAPIURL, data);
         console.log(response);
 

@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import userRoles from "../../../assets/jsonfile/userRole.json"
+import { REACT_APP_BACKEND_URL } from "../../../ApiUrl.js"
 
 const Login = () => {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Login = () => {
 
     const callLogin = async () => {
         if (validate()) {
-            const api_login_url = `${process.env.REACT_APP_BACKEND_URL}/authentication/login/1st`
+            const api_login_url = `${REACT_APP_BACKEND_URL}/authentication/login/1st`
             const userData = {
                 email: email,
                 password: password,

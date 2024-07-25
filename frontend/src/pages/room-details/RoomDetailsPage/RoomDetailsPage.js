@@ -9,6 +9,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { ToastContainer, toast } from "react-toastify";
 import dayjs from 'dayjs';
 import TextInput from "../../../components/input/TextInput";
+import { REACT_APP_BACKEND_URL } from "../../../ApiUrl.js"
 
 const RoomDetailsPage = () => {
     const { id } = useParams();
@@ -20,10 +21,10 @@ const RoomDetailsPage = () => {
     const [feedback, setFeedback] = useState();
     const [feedBackList, setFeedbackList] = useState([]);
 
-    const getRoomDetailsByRoomIdApiUrl = `${process.env.REACT_APP_BACKEND_URL}/booking/roomdetails`;
-    const getFeedbackByRoomIdUrl = `${process.env.REACT_APP_BACKEND_URL}/feedback/getFeedbackByRoomId`;
-    const roomBookingApiUrl = `${process.env.REACT_APP_BACKEND_URL}/booking/addcustomerbooking`;
-    const feedbackApiUrl = `${process.env.REACT_APP_BACKEND_URL}/feedback/addFeedback`;
+    const getRoomDetailsByRoomIdApiUrl = `${REACT_APP_BACKEND_URL}/booking/roomdetails`;
+    const getFeedbackByRoomIdUrl = `${REACT_APP_BACKEND_URL}/feedback/getFeedbackByRoomId`;
+    const roomBookingApiUrl = `${REACT_APP_BACKEND_URL}/booking/addcustomerbooking`;
+    const feedbackApiUrl = `${REACT_APP_BACKEND_URL}/feedback/addFeedback`;
     const roomData = { room_id: id.split("=")[1] };
     const feedbackData = { room_id: id.split("=")[1] };
 

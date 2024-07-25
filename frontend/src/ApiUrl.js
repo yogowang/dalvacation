@@ -1,0 +1,1 @@
+export const REACT_APP_BACKEND_URL = "https://yd9f3nfn5h.execute-api.us-east-1.amazonaws.com/api"

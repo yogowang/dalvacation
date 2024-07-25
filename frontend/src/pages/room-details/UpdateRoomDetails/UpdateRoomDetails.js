@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { RoomDetailsForm } from "../RoomDetailsForm/RoomDetailsForm";
+import { REACT_APP_BACKEND_URL } from "../../../ApiUrl.js"
 
 export const UpdateRoomDetails = () => {
     const { room_id } = useParams();
@@ -42,7 +43,7 @@ export const UpdateRoomDetails = () => {
             features: features
         }
 
-        const updateRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}/booking/updateroomdetails`;
+        const updateRoomDetailsAPIURL = `${REACT_APP_BACKEND_URL}/booking/updateroomdetails`;
         const response = await axios.post(updateRoomDetailsAPIURL, data);
 
         console.log(data);

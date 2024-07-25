@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { List, ListItem, ListItemText, TextField } from '@mui/material';
 import axios from 'axios';
+import { REACT_APP_BACKEND_URL } from "../../../ApiUrl.js"
 
 const style = {
     position: 'absolute',
@@ -34,7 +35,7 @@ export const ChatModal = ({ open, handleOpen, handleClose, chat, user_type, mess
                     user_type: user_type.toLowerCase(),
                     message: inputText
                 }
-                const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/concern/handleconcerncommunication`, payload);
+                const response = await axios.post(`${REACT_APP_BACKEND_URL}/concern/handleconcerncommunication`, payload);
                 handleClose(true);
             } catch (error) {
                 console.log(error);

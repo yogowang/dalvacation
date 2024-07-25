@@ -4,6 +4,7 @@ import SubmitButton from "../../../components/button/SubmitButton";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import { REACT_APP_BACKEND_URL } from "../../../ApiUrl.js"
 
 const SignupConfirmation = () => {
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ const SignupConfirmation = () => {
 
     const callConfirmationCode = async () => {
         if (confirmationCode) {
-            const api_confirmation_code_factor_url = `${process.env.REACT_APP_BACKEND_URL}/authentication/signup/confirmation`;
+            const api_confirmation_code_factor_url = `${REACT_APP_BACKEND_URL}/authentication/signup/confirmation`;
             const userData = {
                 email: email,
                 confirmationCode: confirmationCode,

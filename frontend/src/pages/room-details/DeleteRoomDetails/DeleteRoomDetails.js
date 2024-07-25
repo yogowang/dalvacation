@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { REACT_APP_BACKEND_URL } from "../../../ApiUrl.js"
 
 const style = {
     position: 'absolute',
@@ -26,7 +27,7 @@ export const DeleteRoomDetails = ({ open, handleClose, room_id, room_number }) =
     }
 
     const onSubmit = async () => {
-        const deleteRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}/booking/deleteroomdetails`;
+        const deleteRoomDetailsAPIURL = `${REACT_APP_BACKEND_URL}/booking/deleteroomdetails`;
 
         const response = await axios.post(deleteRoomDetailsAPIURL, data);
         console.log("delete response: ", response);

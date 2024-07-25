@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ConcernCard } from "./ConcernCard/ConcernCard";
 import axios from "axios";
 import { RaiseConcernModal } from "./RaiseConcernModal/RaiseConcernModal";
+import { REACT_APP_BACKEND_URL } from "../../ApiUrl.js"
 
 export const ConcernIndex = () => {
     const [concerns, setConcerns] = useState();
@@ -17,7 +18,7 @@ export const ConcernIndex = () => {
                 const payload = {
                     email
                 }
-                const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/concern/getallconcerns`, payload)
+                const response = await axios.post(`${REACT_APP_BACKEND_URL}/concern/getallconcerns`, payload)
                 setConcerns(JSON.parse(response.data.body).concerns);
             } catch (error) {
                 if (error.response.status === 404) {

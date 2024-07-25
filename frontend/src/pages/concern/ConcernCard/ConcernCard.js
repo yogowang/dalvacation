@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { ChatModal } from '../ChatModal/ChatModal';
 import axios from 'axios';
+import { REACT_APP_BACKEND_URL } from "../../../ApiUrl.js"
 
 const bull = (
     <Box
@@ -28,7 +29,7 @@ export const ConcernCard = ({ concern, user_type }) => {
             const payload = {
                 message_id: concern.message_id
             }
-            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/concern/getconcernchat`, payload)
+            const response = await axios.post(`${REACT_APP_BACKEND_URL}/concern/getconcernchat`, payload)
 
             setChat(JSON.parse(response.data.body).chat);
             setOpen(true);

@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import RoomCard from "../../components/card/RoomCard";
+import { REACT_APP_BACKEND_URL } from "../../ApiUrl.js"
 
 export const RoomList = () => {
     const userType = localStorage.getItem("userType")
@@ -11,7 +12,7 @@ export const RoomList = () => {
 
     useEffect(() => {
         const getAllRoomDetailsResponse = async () => {
-            const getAllRoomDetailsAPIURL = `${process.env.REACT_APP_BACKEND_URL}/booking/allroomdetails`;
+            const getAllRoomDetailsAPIURL = `${REACT_APP_BACKEND_URL}/booking/allroomdetails`;
 
             const response = await axios.post(getAllRoomDetailsAPIURL);
             console.log("response list: -- ", response.data.body);
