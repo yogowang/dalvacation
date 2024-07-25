@@ -6,7 +6,7 @@ Description: Iac for Dal Vacation Home
 Parameters:
   LabRoleArn:
     Type: String
-    Default: arn:aws:iam::160536684166:role/LabRole
+    Default: arn:aws:iam::053346983886:role/LabRole
     Description: The ARN of the LabRole to be used.
 
   LambdaS3Bucket:
@@ -116,8 +116,8 @@ Resources:
       Environment:
         Variables:
           FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable #replace token and api with your own
-          GOOGLE_API_ACCESS_TOKEN: "ya29.a0AXooCgv9_suSQ1-9IpkPjhPtTwY_lQdJVewJHs_5dIDDl8gwLwLOlbivVUfwouPzRKdntUyzNCLPQlDoTwX3i1bqR3F1Sr2K7w02f9zMVOl4n21DHHDw3NAEmjL3CNohiR1Blgh3a4q_8lcKd1zOMuMhEAHs_SAGsx006Sj2PPC-G7x8H7C25qemVrKkrJX3Ru2_-RnqCRK23yoigvaPhSsNZ-X719Pk-zJoeXxFWYdFrs1mVpjVy08RKOv3VFrZ9GtnutYeZcxJdyiiCaLdnu0VkK2xHqgwu-V4e7NYfvOZ0BdRC3uIRCWcKUTRKCMHcgXUgRHWXRpEEsC9i-G94ogw0pJZBDV9-DiFQesy9eb1jDq0yhc5vPwCPNSWhiEce1gwOylYpzTyQH-aU6Y72PvHOC6ePvnmigaCgYKAWcSARMSFQHGX2MiIupnRKp1WDH_gUiU5MhMQw0425"
-          API_ENDPOINT: "https://us-central1-aiplatform.googleapis.com/v1/projects/csci-5410-serverless-428001/locations/us-central1/publishers/google/models/gemini-1.5-flash-001:streamGenerateContent"
+          GOOGLE_API_ACCESS_TOKEN: ""
+          API_ENDPOINT: ""
           GSIName: "room_id_index"
       Code:
         S3Bucket: !Ref LambdaS3Bucket
