@@ -115,7 +115,7 @@ Resources:
       MemorySize: 512
       Environment:
         Variables:
-          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable #replace token and api with your own
+          FeedbackDalVacationDynamoTableName: !Ref FeedbackDalVacationDynamoTable 
           GOOGLE_API_ACCESS_TOKEN: ""
           API_ENDPOINT: ""
           GSIName: "room_id_index"
@@ -468,7 +468,7 @@ Resources:
     Properties:
       FunctionName: "LambdaSNSNotification"
       Runtime: "nodejs20.x"
-      Role: !Ref LabRoleArn # Replace with your own LabRole ARN
+      Role: !Ref LabRoleArn 
       Handler: "index.handler"
       Timeout: 120
       MemorySize: 512
@@ -605,7 +605,7 @@ Resources:
         - AttributeName: "room_id"
           AttributeType: "S"
         - AttributeName: "agent_email"
-          AttributeType: "S" # Add this line for the new GSI attribute
+          AttributeType: "S" 
       KeySchema:
         - AttributeName: "room_id"
           KeyType: "HASH"
@@ -618,7 +618,7 @@ Resources:
             - AttributeName: "agent_email"
               KeyType: "HASH"
           Projection:
-            ProjectionType: "ALL" # Adjust projection type as needed
+            ProjectionType: "ALL" 
           ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
@@ -631,7 +631,7 @@ Resources:
         - AttributeName: "booking_reference_code"
           AttributeType: "S"
         - AttributeName: "room_id"
-          AttributeType: "N" # Add this line for the new GSI attribute
+          AttributeType: "N" 
       KeySchema:
         - AttributeName: "booking_reference_code"
           KeyType: "HASH"
@@ -644,7 +644,7 @@ Resources:
             - AttributeName: "room_id"
               KeyType: "HASH"
           Projection:
-            ProjectionType: "ALL" # Adjust projection type as needed
+            ProjectionType: "ALL" 
           ProvisionedThroughput:
             ReadCapacityUnits: 5
             WriteCapacityUnits: 5
@@ -938,7 +938,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -954,7 +954,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   ConfirmationMethod:
     Type: AWS::ApiGateway::Method
@@ -968,7 +968,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -984,7 +984,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   FirstLoginMethod:
     Type: AWS::ApiGateway::Method
@@ -998,7 +998,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1014,7 +1014,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   SecondLoginMethod:
     Type: AWS::ApiGateway::Method
@@ -1028,7 +1028,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1044,7 +1044,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   ThirdLoginMethod:
     Type: AWS::ApiGateway::Method
@@ -1058,7 +1058,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1074,7 +1074,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   AddFeedbackMethod:
     Type: AWS::ApiGateway::Method
@@ -1088,7 +1088,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1104,7 +1104,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   ReturnAllFeedbackMethod:
     Type: AWS::ApiGateway::Method
@@ -1118,7 +1118,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1134,7 +1134,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   GetFeedbackByRoomIdMethod:
     Type: AWS::ApiGateway::Method
@@ -1148,7 +1148,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1164,7 +1164,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   DeleteFeedbackByIdMethod:
     Type: AWS::ApiGateway::Method
@@ -1178,7 +1178,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1194,7 +1194,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   GetAllRoomDetailsMethod:
     Type: AWS::ApiGateway::Method
@@ -1208,7 +1208,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1224,7 +1224,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   GetRoomDetailsByIdMethod:
     Type: AWS::ApiGateway::Method
@@ -1238,7 +1238,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1254,7 +1254,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   AddRoomDetailsMethod:
     Type: AWS::ApiGateway::Method
@@ -1268,7 +1268,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1284,7 +1284,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   UpdateRoomDetailsMethod:
     Type: AWS::ApiGateway::Method
@@ -1298,7 +1298,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1314,7 +1314,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   DeleteRoomDetailsMethod:
     Type: AWS::ApiGateway::Method
@@ -1328,7 +1328,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1344,7 +1344,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   AddCustomerBookingMethod:
     Type: AWS::ApiGateway::Method
@@ -1358,7 +1358,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1374,7 +1374,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   UserCountMethod:
     Type: AWS::ApiGateway::Method
@@ -1388,7 +1388,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1404,7 +1404,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   HandleConcernCommunicationMethod:
     Type: AWS::ApiGateway::Method
@@ -1418,7 +1418,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1434,7 +1434,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   GetAllConcernsMethod:
     Type: AWS::ApiGateway::Method
@@ -1448,7 +1448,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1464,7 +1464,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   GetConcernChatMethod:
     Type: AWS::ApiGateway::Method
@@ -1478,7 +1478,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1494,7 +1494,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   VirtualAssistantMethod:
     Type: AWS::ApiGateway::Method
@@ -1508,7 +1508,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1524,7 +1524,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   GetIncomeByAgentMethod:
     Type: AWS::ApiGateway::Method
@@ -1538,7 +1538,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1554,7 +1554,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   GetFeedbackByAgentMethod:
     Type: AWS::ApiGateway::Method
@@ -1568,7 +1568,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1584,7 +1584,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   ReloadLookerStudioDataMethod:
     Type: AWS::ApiGateway::Method
@@ -1598,7 +1598,7 @@ Resources:
           ResponseModels:
             application/json: "Empty"
           ResponseParameters:
-            method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+            method.response.header.Access-Control-Allow-Origin: "'*'" 
       RequestParameters: {}
       RequestModels: {}
       Integration:
@@ -1614,7 +1614,7 @@ Resources:
             ResponseTemplates:
               application/json: ""
             ResponseParameters:
-              method.response.header.Access-Control-Allow-Origin: "'*'" # replace it with you own domain
+              method.response.header.Access-Control-Allow-Origin: "'*'" 
 
   DalVacationHomeApiStage:
     Type: AWS::ApiGateway::Stage
