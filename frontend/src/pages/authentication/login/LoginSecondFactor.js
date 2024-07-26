@@ -4,20 +4,23 @@ import SubmitButton from "../../../components/button/SubmitButton";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import { REACT_APP_BACKEND_URL } from "../../../ApiUrl.js"
 
 const LoginSecondFactor = () => {
     const navigate = useNavigate();
+    const user_type = localStorage.getItem("userType");
     const email = localStorage.getItem("email");
     const question = localStorage.getItem("question");
     const [answer, setAnswer] = useState();
 
     const callSecondFactorAuth = async () => {
         if (answer) {
-            const api_login_2_factor_url = `https://qz7jhm2dvd.execute-api.us-east-1.amazonaws.com/login-factor-two/authentication/login/2nd`
+            const api_login_2_factor_url = `${REACT_APP_BACKEND_URL}/authentication/login/2nd`
             const userData = {
                 email: email,
                 question: question,
-                answer: answer
+                answer: answer,
+                user_type: user_type.toLowerCase()
             };
 
             console.log("url: ", api_login_2_factor_url);

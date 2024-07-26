@@ -7,6 +7,7 @@ import SelectInput from "../../../components/input/SelectInput";
 import axios from "axios";
 import mfaQuestions from "../../../assets/jsonfile/mfaSecurityQuestions.json"
 import userRoles from "../../../assets/jsonfile/userRole.json"
+import { REACT_APP_BACKEND_URL } from "../../../ApiUrl.js"
 
 const Signup = () => {
     const navigate = useNavigate()
@@ -43,7 +44,7 @@ const Signup = () => {
 
             console.log(userData);
 
-            const api_signup_url = `https://qz7jhm2dvd.execute-api.us-east-1.amazonaws.com/signup/authentication/signup`; //`${process.env.REACT_APP_BACKEND_URL}api/users/signup`;
+            const api_signup_url = `${REACT_APP_BACKEND_URL}/authentication/signup`;
 
             console.log("backend url: ", api_signup_url);
 
